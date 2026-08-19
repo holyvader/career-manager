@@ -1,0 +1,22 @@
+{
+	"name": "career-manager",
+	"version": "1.0.0",
+	"workspaces": [
+		"packages/*"
+	],
+	"scripts": {
+		"app:lint": "biome lint .",
+		"app:lint:fix": "biome lint --write .",
+		"app:lint:fix:unsafe": "biome lint --write --unsafe .",
+		"app:format": "biome format --write .",
+		"app:check": "biome check --write ."
+	},
+	"devDependencies": {
+		"@biomejs/biome": "catalog:linting"
+	},
+	"catalogs": {
+		"linting": {
+			"@biomejs/biome": "^2.5.9"
+		}
+	}
+}

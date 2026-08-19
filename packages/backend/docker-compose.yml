@@ -1,0 +1,49 @@
+# Use postgres/example user/password credentials
+name: career-manager
+
+services:
+
+  db:
+    image: postgres
+    container_name: career-manager-db
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: career_manager
+
+  # Log store. Backend services push logs here (see src/logger.ts); Grafana queries it.
+  loki:
+    image: grafana/loki:3.3.2
+    container_name: career-manager-loki
+    restart: always
+    ports:
+      - 3100:3100
+    command: -config.file=/etc/loki/local-config.yaml
+
+  # UI at http://localhost:3200, default login admin/admin. Loki datasource is
+  # auto-provisioned from ./grafana/provisioning, no manual setup needed.
+  grafana:
+    image: grafana/grafana:11.4.0
+    container_name: career-manager-grafana
+    restart: always
+    ports:
+      - 3200:3000
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - loki
+
+volumes:
+  grafana-data:

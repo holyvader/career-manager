@@ -17,3 +17,6 @@ node_modules/
 
 # biome
 .biome-cache/
+
+# turbo
+.turbo

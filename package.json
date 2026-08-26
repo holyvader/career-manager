@@ -4,19 +4,31 @@
 	"workspaces": [
 		"packages/*"
 	],
+	"devEngines": {
+		"packageManager": {
+			"name": "bun",
+			"version": "1.4.0"
+		}
+	},
 	"scripts": {
 		"app:lint": "biome lint .",
 		"app:lint:fix": "biome lint --write .",
 		"app:lint:fix:unsafe": "biome lint --write --unsafe .",
 		"app:format": "biome format --write .",
-		"app:check": "biome check --write ."
+		"app:check": "biome check --write .",
+		"app:backend:docker": "docker compose -f docker-compose.backend.yml up",
+		"app:backend:docker:down": "docker compose -f docker-compose.backend.yml down"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "catalog:linting"
+		"@biomejs/biome": "catalog:linting",
+		"turbo": "^2.10.12"
 	},
 	"catalogs": {
 		"linting": {
 			"@biomejs/biome": "^2.5.9"
 		}
+	},
+	"dependencies": {
+		"bun": "^1.4.0"
 	}
 }

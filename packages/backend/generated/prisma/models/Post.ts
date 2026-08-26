@@ -7,9 +7,9 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client";
-import type * as $Enums from "../enums.js";
-import type * as Prisma from "../internal/prismaNamespace.js";
+import type * as runtime from '@prisma/client/runtime/client';
+import type * as $Enums from '../enums.js';
+import type * as Prisma from '../internal/prismaNamespace.js';
 
 /**
  * Model Post
@@ -163,7 +163,7 @@ export type PostAggregateArgs<
 };
 
 export type GetPostAggregateType<T extends PostAggregateArgs> = {
-	[P in keyof T & keyof AggregatePost]: P extends "_count" | "count"
+	[P in keyof T & keyof AggregatePost]: P extends '_count' | 'count'
 		? T[P] extends true
 			? number
 			: Prisma.GetScalarType<T[P], AggregatePost[P]>
@@ -205,8 +205,8 @@ export type PostGroupByOutputType = {
 export type GetPostGroupByPayload<T extends PostGroupByArgs> =
 	Prisma.PrismaPromise<
 		Array<
-			Prisma.PickEnumerable<PostGroupByOutputType, T["by"]> & {
-				[P in keyof T & keyof PostGroupByOutputType]: P extends "_count"
+			Prisma.PickEnumerable<PostGroupByOutputType, T['by']> & {
+				[P in keyof T & keyof PostGroupByOutputType]: P extends '_count'
 					? T[P] extends boolean
 						? number
 						: Prisma.GetScalarType<T[P], PostGroupByOutputType[P]>
@@ -219,11 +219,11 @@ export type PostWhereInput = {
 	AND?: Prisma.PostWhereInput | Prisma.PostWhereInput[];
 	OR?: Prisma.PostWhereInput[];
 	NOT?: Prisma.PostWhereInput | Prisma.PostWhereInput[];
-	id?: Prisma.IntFilter<"Post"> | number;
-	title?: Prisma.StringFilter<"Post"> | string;
-	content?: Prisma.StringNullableFilter<"Post"> | string | null;
-	published?: Prisma.BoolFilter<"Post"> | boolean;
-	authorId?: Prisma.IntFilter<"Post"> | number;
+	id?: Prisma.IntFilter<'Post'> | number;
+	title?: Prisma.StringFilter<'Post'> | string;
+	content?: Prisma.StringNullableFilter<'Post'> | string | null;
+	published?: Prisma.BoolFilter<'Post'> | boolean;
+	authorId?: Prisma.IntFilter<'Post'> | number;
 	author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
 	tags?: Prisma.TagListRelationFilter;
 };
@@ -244,14 +244,14 @@ export type PostWhereUniqueInput = Prisma.AtLeast<
 		AND?: Prisma.PostWhereInput | Prisma.PostWhereInput[];
 		OR?: Prisma.PostWhereInput[];
 		NOT?: Prisma.PostWhereInput | Prisma.PostWhereInput[];
-		title?: Prisma.StringFilter<"Post"> | string;
-		content?: Prisma.StringNullableFilter<"Post"> | string | null;
-		published?: Prisma.BoolFilter<"Post"> | boolean;
-		authorId?: Prisma.IntFilter<"Post"> | number;
+		title?: Prisma.StringFilter<'Post'> | string;
+		content?: Prisma.StringNullableFilter<'Post'> | string | null;
+		published?: Prisma.BoolFilter<'Post'> | boolean;
+		authorId?: Prisma.IntFilter<'Post'> | number;
 		author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>;
 		tags?: Prisma.TagListRelationFilter;
 	},
-	"id"
+	'id'
 >;
 
 export type PostOrderByWithAggregationInput = {
@@ -275,11 +275,11 @@ export type PostScalarWhereWithAggregatesInput = {
 	NOT?:
 		| Prisma.PostScalarWhereWithAggregatesInput
 		| Prisma.PostScalarWhereWithAggregatesInput[];
-	id?: Prisma.IntWithAggregatesFilter<"Post"> | number;
-	title?: Prisma.StringWithAggregatesFilter<"Post"> | string;
-	content?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null;
-	published?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean;
-	authorId?: Prisma.IntWithAggregatesFilter<"Post"> | number;
+	id?: Prisma.IntWithAggregatesFilter<'Post'> | number;
+	title?: Prisma.StringWithAggregatesFilter<'Post'> | string;
+	content?: Prisma.StringNullableWithAggregatesFilter<'Post'> | string | null;
+	published?: Prisma.BoolWithAggregatesFilter<'Post'> | boolean;
+	authorId?: Prisma.IntWithAggregatesFilter<'Post'> | number;
 };
 
 export type PostCreateInput = {
@@ -614,11 +614,11 @@ export type PostScalarWhereInput = {
 	AND?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[];
 	OR?: Prisma.PostScalarWhereInput[];
 	NOT?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[];
-	id?: Prisma.IntFilter<"Post"> | number;
-	title?: Prisma.StringFilter<"Post"> | string;
-	content?: Prisma.StringNullableFilter<"Post"> | string | null;
-	published?: Prisma.BoolFilter<"Post"> | boolean;
-	authorId?: Prisma.IntFilter<"Post"> | number;
+	id?: Prisma.IntFilter<'Post'> | number;
+	title?: Prisma.StringFilter<'Post'> | string;
+	content?: Prisma.StringNullableFilter<'Post'> | string | null;
+	published?: Prisma.BoolFilter<'Post'> | boolean;
+	authorId?: Prisma.IntFilter<'Post'> | number;
 };
 
 export type PostCreateWithoutTagsInput = {
@@ -776,7 +776,7 @@ export type PostSelect<
 		tags?: boolean | Prisma.Post$tagsArgs<ExtArgs>;
 		_count?: boolean | Prisma.PostCountOutputTypeDefaultArgs<ExtArgs>;
 	},
-	ExtArgs["result"]["post"]
+	ExtArgs['result']['post']
 >;
 
 export type PostSelectCreateManyAndReturn<
@@ -791,7 +791,7 @@ export type PostSelectCreateManyAndReturn<
 		authorId?: boolean;
 		author?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 	},
-	ExtArgs["result"]["post"]
+	ExtArgs['result']['post']
 >;
 
 export type PostSelectUpdateManyAndReturn<
@@ -806,7 +806,7 @@ export type PostSelectUpdateManyAndReturn<
 		authorId?: boolean;
 		author?: boolean | Prisma.UserDefaultArgs<ExtArgs>;
 	},
-	ExtArgs["result"]["post"]
+	ExtArgs['result']['post']
 >;
 
 export type PostSelectScalar = {
@@ -821,8 +821,8 @@ export type PostOmit<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetOmit<
-	"id" | "title" | "content" | "published" | "authorId",
-	ExtArgs["result"]["post"]
+	'id' | 'title' | 'content' | 'published' | 'authorId',
+	ExtArgs['result']['post']
 >;
 export type PostInclude<
 	ExtArgs extends
@@ -849,7 +849,7 @@ export type $PostPayload<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
-	name: "Post";
+	name: 'Post';
 	objects: {
 		author: Prisma.$UserPayload<ExtArgs>;
 		tags: Prisma.$TagPayload<ExtArgs>[];
@@ -862,7 +862,7 @@ export type $PostPayload<
 			published: boolean;
 			authorId: number;
 		},
-		ExtArgs["result"]["post"]
+		ExtArgs['result']['post']
 	>;
 	composites: {};
 };
@@ -874,7 +874,7 @@ export type PostGetPayload<
 export type PostCountArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
-> = Omit<PostFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
+> = Omit<PostFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
 	select?: PostCountAggregateInputType | true;
 };
 
@@ -884,8 +884,8 @@ export interface PostDelegate<
 	GlobalOmitOptions = {},
 > {
 	[K: symbol]: {
-		types: Prisma.TypeMap<ExtArgs>["model"]["Post"];
-		meta: { name: "Post" };
+		types: Prisma.TypeMap<ExtArgs>['model']['Post'];
+		meta: { name: 'Post' };
 	};
 	/**
 	 * Find zero or one Post that matches the filter.
@@ -904,7 +904,7 @@ export interface PostDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$PostPayload<ExtArgs>,
 			T,
-			"findUnique",
+			'findUnique',
 			GlobalOmitOptions
 		> | null,
 		null,
@@ -930,7 +930,7 @@ export interface PostDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$PostPayload<ExtArgs>,
 			T,
-			"findUniqueOrThrow",
+			'findUniqueOrThrow',
 			GlobalOmitOptions
 		>,
 		never,
@@ -957,7 +957,7 @@ export interface PostDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$PostPayload<ExtArgs>,
 			T,
-			"findFirst",
+			'findFirst',
 			GlobalOmitOptions
 		> | null,
 		null,
@@ -985,7 +985,7 @@ export interface PostDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$PostPayload<ExtArgs>,
 			T,
-			"findFirstOrThrow",
+			'findFirstOrThrow',
 			GlobalOmitOptions
 		>,
 		never,
@@ -1015,7 +1015,7 @@ export interface PostDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$PostPayload<ExtArgs>,
 			T,
-			"findMany",
+			'findMany',
 			GlobalOmitOptions
 		>
 	>;
@@ -1038,7 +1038,7 @@ export interface PostDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$PostPayload<ExtArgs>,
 			T,
-			"create",
+			'create',
 			GlobalOmitOptions
 		>,
 		never,
@@ -1090,7 +1090,7 @@ export interface PostDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$PostPayload<ExtArgs>,
 			T,
-			"createManyAndReturn",
+			'createManyAndReturn',
 			GlobalOmitOptions
 		>
 	>;
@@ -1113,7 +1113,7 @@ export interface PostDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$PostPayload<ExtArgs>,
 			T,
-			"delete",
+			'delete',
 			GlobalOmitOptions
 		>,
 		never,
@@ -1142,7 +1142,7 @@ export interface PostDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$PostPayload<ExtArgs>,
 			T,
-			"update",
+			'update',
 			GlobalOmitOptions
 		>,
 		never,
@@ -1221,7 +1221,7 @@ export interface PostDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$PostPayload<ExtArgs>,
 			T,
-			"updateManyAndReturn",
+			'updateManyAndReturn',
 			GlobalOmitOptions
 		>
 	>;
@@ -1249,7 +1249,7 @@ export interface PostDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$PostPayload<ExtArgs>,
 			T,
-			"upsert",
+			'upsert',
 			GlobalOmitOptions
 		>,
 		never,
@@ -1273,10 +1273,10 @@ export interface PostDelegate<
 	count<T extends PostCountArgs>(
 		args?: Prisma.Subset<T, PostCountArgs>,
 	): Prisma.PrismaPromise<
-		T extends runtime.Types.Utils.Record<"select", any>
-			? T["select"] extends true
+		T extends runtime.Types.Utils.Record<'select', any>
+			? T['select'] extends true
 				? number
-				: Prisma.GetScalarType<T["select"], PostCountAggregateOutputType>
+				: Prisma.GetScalarType<T['select'], PostCountAggregateOutputType>
 			: number
 	>;
 
@@ -1329,20 +1329,20 @@ export interface PostDelegate<
 	groupBy<
 		T extends PostGroupByArgs,
 		HasSelectOrTake extends Prisma.Or<
-			Prisma.Extends<"skip", Prisma.Keys<T>>,
-			Prisma.Extends<"take", Prisma.Keys<T>>
+			Prisma.Extends<'skip', Prisma.Keys<T>>,
+			Prisma.Extends<'take', Prisma.Keys<T>>
 		>,
 		OrderByArg extends Prisma.True extends HasSelectOrTake
-			? { orderBy: PostGroupByArgs["orderBy"] }
-			: { orderBy?: PostGroupByArgs["orderBy"] },
+			? { orderBy: PostGroupByArgs['orderBy'] }
+			: { orderBy?: PostGroupByArgs['orderBy'] },
 		OrderFields extends Prisma.ExcludeUnderscoreKeys<
-			Prisma.Keys<Prisma.MaybeTupleToUnion<T["orderBy"]>>
+			Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>
 		>,
-		ByFields extends Prisma.MaybeTupleToUnion<T["by"]>,
+		ByFields extends Prisma.MaybeTupleToUnion<T['by']>,
 		ByValid extends Prisma.Has<ByFields, OrderFields>,
-		HavingFields extends Prisma.GetHavingFields<T["having"]>,
+		HavingFields extends Prisma.GetHavingFields<T['having']>,
 		HavingValid extends Prisma.Has<ByFields, HavingFields>,
-		ByEmpty extends T["by"] extends never[] ? Prisma.True : Prisma.False,
+		ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False,
 		InputErrors extends ByEmpty extends Prisma.True
 			? `Error: "by" must not be empty.`
 			: HavingValid extends Prisma.False
@@ -1353,13 +1353,13 @@ export interface PostDelegate<
 								? `Error: Field "${P}" used in "having" needs to be provided in "by".`
 								: [
 										Error,
-										"Field ",
+										'Field ',
 										P,
 										` in "having" needs to be provided in "by"`,
 									];
 					}[HavingFields]
-				: "take" extends Prisma.Keys<T>
-					? "orderBy" extends Prisma.Keys<T>
+				: 'take' extends Prisma.Keys<T>
+					? 'orderBy' extends Prisma.Keys<T>
 						? ByValid extends Prisma.True
 							? {}
 							: {
@@ -1368,8 +1368,8 @@ export interface PostDelegate<
 										: `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
 								}[OrderFields]
 						: 'Error: If you provide "take", you also need to provide "orderBy"'
-					: "skip" extends Prisma.Keys<T>
-						? "orderBy" extends Prisma.Keys<T>
+					: 'skip' extends Prisma.Keys<T>
+						? 'orderBy' extends Prisma.Keys<T>
 							? ByValid extends Prisma.True
 								? {}
 								: {
@@ -1410,14 +1410,14 @@ export interface Prisma__PostClient<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 	GlobalOmitOptions = {},
 > extends Prisma.PrismaPromise<T> {
-	readonly [Symbol.toStringTag]: "PrismaPromise";
+	readonly [Symbol.toStringTag]: 'PrismaPromise';
 	author<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(
 		args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>,
 	): Prisma.Prisma__UserClient<
 		| runtime.Types.Result.GetResult<
 				Prisma.$UserPayload<ExtArgs>,
 				T,
-				"findUniqueOrThrow",
+				'findUniqueOrThrow',
 				GlobalOmitOptions
 		  >
 		| Null,
@@ -1431,7 +1431,7 @@ export interface Prisma__PostClient<
 		| runtime.Types.Result.GetResult<
 				Prisma.$TagPayload<ExtArgs>,
 				T,
-				"findMany",
+				'findMany',
 				GlobalOmitOptions
 		  >
 		| Null
@@ -1478,11 +1478,11 @@ export interface Prisma__PostClient<
  * Fields of the Post model
  */
 export interface PostFieldRefs {
-	readonly id: Prisma.FieldRef<"Post", "Int">;
-	readonly title: Prisma.FieldRef<"Post", "String">;
-	readonly content: Prisma.FieldRef<"Post", "String">;
-	readonly published: Prisma.FieldRef<"Post", "Boolean">;
-	readonly authorId: Prisma.FieldRef<"Post", "Int">;
+	readonly id: Prisma.FieldRef<'Post', 'Int'>;
+	readonly title: Prisma.FieldRef<'Post', 'String'>;
+	readonly content: Prisma.FieldRef<'Post', 'String'>;
+	readonly published: Prisma.FieldRef<'Post', 'Boolean'>;
+	readonly authorId: Prisma.FieldRef<'Post', 'Int'>;
 }
 
 // Custom InputTypes

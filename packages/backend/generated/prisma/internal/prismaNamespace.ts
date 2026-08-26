@@ -14,11 +14,11 @@
  * model files in the `model` directory!
  */
 
-import * as runtime from "@prisma/client/runtime/client";
-import type * as Prisma from "../models.js";
-import { type PrismaClient } from "./class.js";
+import * as runtime from '@prisma/client/runtime/client';
+import type * as Prisma from '../models.js';
+import { type PrismaClient } from './class.js';
 
-export type * from "../models.js";
+export type * from '../models.js';
 
 export type DMMF = typeof runtime.DMMF;
 
@@ -97,8 +97,8 @@ export type PrismaVersion = {
  * Query Engine version: e922089b7d7502aff4249d5da3420f6fa55fc6ad
  */
 export const prismaVersion: PrismaVersion = {
-	client: "7.9.1",
-	engine: "e922089b7d7502aff4249d5da3420f6fa55fc6ad",
+	client: '7.9.1',
+	engine: 'e922089b7d7502aff4249d5da3420f6fa55fc6ad',
 };
 
 /**
@@ -196,9 +196,9 @@ export type PrismaClientConstructorArgs<Options extends PrismaClientOptions> = [
 export type SelectSubset<T, U> = {
 	[key in keyof T]: key extends keyof U ? T[key] : never;
 } & (T extends SelectAndInclude
-	? "Please either choose `select` or `include`."
+	? 'Please either choose `select` or `include`.'
 	: T extends SelectAndOmit
-		? "Please either choose `select` or `omit`."
+		? 'Please either choose `select` or `omit`.'
 		: {});
 
 /**
@@ -380,13 +380,13 @@ export type GetScalarType<T, O> = O extends object
 		}
 	: never;
 
-type FieldPaths<T, U = Omit<T, "_avg" | "_sum" | "_count" | "_min" | "_max">> =
+type FieldPaths<T, U = Omit<T, '_avg' | '_sum' | '_count' | '_min' | '_max'>> =
 	IsObject<T> extends True ? U : T;
 
 export type GetHavingFields<T> = {
 	[K in keyof T]: Or<
-		Or<Extends<"OR", K>, Extends<"AND", K>>,
-		Extends<"NOT", K>
+		Or<Extends<'OR', K>, Extends<'AND', K>>,
+		Extends<'NOT', K>
 	> extends True
 		? // infer is only needed to not hit TS limit
 			// based on the brilliant idea of Pierre-Antoine Mills
@@ -430,9 +430,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never
 	: FieldRef<Model, FieldType>;
 
 export const ModelName = {
-	User: "User",
-	Post: "Post",
-	Tag: "Tag",
+	User: 'User',
+	Post: 'Post',
+	Tag: 'Tag',
 } as const;
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -442,7 +442,7 @@ export interface TypeMapCb<GlobalOmitOptions = {}>
 		{ extArgs: runtime.Types.Extensions.InternalArgs },
 		runtime.Types.Utils.Record<string, any>
 	> {
-	returns: TypeMap<this["params"]["extArgs"], GlobalOmitOptions>;
+	returns: TypeMap<this['params']['extArgs'], GlobalOmitOptions>;
 }
 
 export type TypeMap<
@@ -454,7 +454,7 @@ export type TypeMap<
 		omit: GlobalOmitOptions;
 	};
 	meta: {
-		modelProps: "user" | "post" | "tag";
+		modelProps: 'user' | 'post' | 'tag';
 		txIsolationLevel: TransactionIsolationLevel;
 	};
 	model: {
@@ -716,60 +716,60 @@ export type TypeMap<
  */
 
 export const TransactionIsolationLevel = runtime.makeStrictEnum({
-	ReadUncommitted: "ReadUncommitted",
-	ReadCommitted: "ReadCommitted",
-	RepeatableRead: "RepeatableRead",
-	Serializable: "Serializable",
+	ReadUncommitted: 'ReadUncommitted',
+	ReadCommitted: 'ReadCommitted',
+	RepeatableRead: 'RepeatableRead',
+	Serializable: 'Serializable',
 } as const);
 
 export type TransactionIsolationLevel =
 	(typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
 
 export const UserScalarFieldEnum = {
-	id: "id",
-	email: "email",
-	name: "name",
+	id: 'id',
+	email: 'email',
+	name: 'name',
 } as const;
 
 export type UserScalarFieldEnum =
 	(typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
 
 export const PostScalarFieldEnum = {
-	id: "id",
-	title: "title",
-	content: "content",
-	published: "published",
-	authorId: "authorId",
+	id: 'id',
+	title: 'title',
+	content: 'content',
+	published: 'published',
+	authorId: 'authorId',
 } as const;
 
 export type PostScalarFieldEnum =
 	(typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum];
 
 export const TagScalarFieldEnum = {
-	id: "id",
-	name: "name",
+	id: 'id',
+	name: 'name',
 } as const;
 
 export type TagScalarFieldEnum =
 	(typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum];
 
 export const SortOrder = {
-	asc: "asc",
-	desc: "desc",
+	asc: 'asc',
+	desc: 'desc',
 } as const;
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
 
 export const QueryMode = {
-	default: "default",
-	insensitive: "insensitive",
+	default: 'default',
+	insensitive: 'insensitive',
 } as const;
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode];
 
 export const NullsOrder = {
-	first: "first",
-	last: "last",
+	first: 'first',
+	last: 'last',
 } as const;
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];
@@ -783,7 +783,7 @@ export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<
 	$PrismaModel,
-	"Int"
+	'Int'
 >;
 
 /**
@@ -791,7 +791,7 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<
 	$PrismaModel,
-	"Int[]"
+	'Int[]'
 >;
 
 /**
@@ -799,7 +799,7 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<
  */
 export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<
 	$PrismaModel,
-	"String"
+	'String'
 >;
 
 /**
@@ -807,7 +807,7 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<
  */
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<
 	$PrismaModel,
-	"String[]"
+	'String[]'
 >;
 
 /**
@@ -815,7 +815,7 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<
 	$PrismaModel,
-	"Boolean"
+	'Boolean'
 >;
 
 /**
@@ -823,7 +823,7 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<
 	$PrismaModel,
-	"Float"
+	'Float'
 >;
 
 /**
@@ -831,7 +831,7 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<
 	$PrismaModel,
-	"Float[]"
+	'Float[]'
 >;
 
 /**
@@ -843,12 +843,12 @@ export type BatchPayload = {
 
 export const defineExtension = runtime.Extensions
 	.defineExtension as unknown as runtime.Types.Extensions.ExtendsHook<
-	"define",
+	'define',
 	TypeMapCb,
 	runtime.Types.Extensions.DefaultArgs
 >;
 export type DefaultPrismaClient = PrismaClient;
-export type ErrorFormat = "pretty" | "colorless" | "minimal";
+export type ErrorFormat = 'pretty' | 'colorless' | 'minimal';
 /**
  * Options common to all variants of `PrismaClientOptions`, regardless of whether you connect to your database through a driver adapter or through Prisma Accelerate.
  */
@@ -1000,16 +1000,16 @@ export type GlobalOmitConfig = {
 };
 
 /* Types for Logging */
-export type LogLevel = "info" | "query" | "warn" | "error";
+export type LogLevel = 'info' | 'query' | 'warn' | 'error';
 export type LogDefinition = {
 	level: LogLevel;
-	emit: "stdout" | "event";
+	emit: 'stdout' | 'event';
 };
 
 export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
 
 export type GetLogType<T> = CheckIsLogLevel<
-	T extends LogDefinition ? T["level"] : T
+	T extends LogDefinition ? T['level'] : T
 >;
 
 export type GetEvents<T extends any[]> =
@@ -1031,27 +1031,27 @@ export type LogEvent = {
 /* End Types for Logging */
 
 export type PrismaAction =
-	| "findUnique"
-	| "findUniqueOrThrow"
-	| "findMany"
-	| "findFirst"
-	| "findFirstOrThrow"
-	| "create"
-	| "createMany"
-	| "createManyAndReturn"
-	| "update"
-	| "updateMany"
-	| "updateManyAndReturn"
-	| "upsert"
-	| "delete"
-	| "deleteMany"
-	| "executeRaw"
-	| "queryRaw"
-	| "aggregate"
-	| "count"
-	| "runCommandRaw"
-	| "findRaw"
-	| "groupBy";
+	| 'findUnique'
+	| 'findUniqueOrThrow'
+	| 'findMany'
+	| 'findFirst'
+	| 'findFirstOrThrow'
+	| 'create'
+	| 'createMany'
+	| 'createManyAndReturn'
+	| 'update'
+	| 'updateMany'
+	| 'updateManyAndReturn'
+	| 'upsert'
+	| 'delete'
+	| 'deleteMany'
+	| 'executeRaw'
+	| 'queryRaw'
+	| 'aggregate'
+	| 'count'
+	| 'runCommandRaw'
+	| 'findRaw'
+	| 'groupBy';
 
 /**
  * `PrismaClient` proxy available in interactive transactions.

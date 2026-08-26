@@ -4,6 +4,11 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "bun run --watch src/app.ts",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --write .",
+		"lint:fix:unsafe": "biome lint --write --unsafe .",
+		"format": "biome format --write .",
+		"check": "biome check --write .",
 		"prisma:migrate:dev": "prisma migrate dev",
 		"prisma:migrate:deploy": "prisma migrate deploy",
 		"prisma:migrate:reset": "prisma migrate reset",
@@ -13,30 +18,25 @@
 		"prisma:db:pull": "prisma db pull",
 		"prisma:studio": "prisma studio",
 		"prisma:validate": "prisma validate",
-		"prisma:format": "prisma format",
-		"app:lint": "biome lint .",
-		"app:lint:fix": "biome lint --write .",
-		"app:lint:fix:unsafe": "biome lint --write --unsafe .",
-		"app:format": "biome format --write .",
-		"app:check": "biome check --write ."
+		"prisma:format": "prisma format"
 	},
 	"dependencies": {
-		"@prisma/adapter-pg": "^7.9.1",
-		"@prisma/client": "^7.9.1",
-		"better-auth": "^1.7.1",
-		"dotenv": "^17.4.2",
-		"elysia": "latest",
-		"pg": "^8.23.0",
-		"pino": "^10.3.1",
-		"pino-loki": "^3.0.0",
-		"pino-pretty": "^13.1.1",
-		"tsx": "^4.23.12"
+		"@prisma/adapter-pg": "catalog:backend",
+		"@prisma/client": "catalog:backend",
+		"better-auth": "catalog:backend",
+		"dotenv": "catalog:backend",
+		"elysia": "catalog:backend",
+		"pg": "catalog:backend",
+		"pino": "catalog:backend",
+		"pino-loki": "catalog:backend",
+		"pino-pretty": "catalog:backend",
+		"tsx": "catalog:backend"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "catalog:linting",
-		"@types/pg": "^8.21.0",
-		"bun-types": "latest",
-		"prisma": "^7.9.1"
+		"@types/pg": "catalog:backend-dev",
+		"bun-types": "catalog:backend-dev",
+		"prisma": "catalog:backend-dev"
 	},
 	"type": "module",
 	"module": "src/index.js"

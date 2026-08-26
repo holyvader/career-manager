@@ -7,9 +7,9 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client";
-import type * as $Enums from "../enums.js";
-import type * as Prisma from "../internal/prismaNamespace.js";
+import type * as runtime from '@prisma/client/runtime/client';
+import type * as $Enums from '../enums.js';
+import type * as Prisma from '../internal/prismaNamespace.js';
 
 /**
  * Model User
@@ -147,7 +147,7 @@ export type UserAggregateArgs<
 };
 
 export type GetUserAggregateType<T extends UserAggregateArgs> = {
-	[P in keyof T & keyof AggregateUser]: P extends "_count" | "count"
+	[P in keyof T & keyof AggregateUser]: P extends '_count' | 'count'
 		? T[P] extends true
 			? number
 			: Prisma.GetScalarType<T[P], AggregateUser[P]>
@@ -187,8 +187,8 @@ export type UserGroupByOutputType = {
 export type GetUserGroupByPayload<T extends UserGroupByArgs> =
 	Prisma.PrismaPromise<
 		Array<
-			Prisma.PickEnumerable<UserGroupByOutputType, T["by"]> & {
-				[P in keyof T & keyof UserGroupByOutputType]: P extends "_count"
+			Prisma.PickEnumerable<UserGroupByOutputType, T['by']> & {
+				[P in keyof T & keyof UserGroupByOutputType]: P extends '_count'
 					? T[P] extends boolean
 						? number
 						: Prisma.GetScalarType<T[P], UserGroupByOutputType[P]>
@@ -201,9 +201,9 @@ export type UserWhereInput = {
 	AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
 	OR?: Prisma.UserWhereInput[];
 	NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
-	id?: Prisma.IntFilter<"User"> | number;
-	email?: Prisma.StringFilter<"User"> | string;
-	name?: Prisma.StringNullableFilter<"User"> | string | null;
+	id?: Prisma.IntFilter<'User'> | number;
+	email?: Prisma.StringFilter<'User'> | string;
+	name?: Prisma.StringNullableFilter<'User'> | string | null;
 	posts?: Prisma.PostListRelationFilter;
 };
 
@@ -221,10 +221,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
 		AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
 		OR?: Prisma.UserWhereInput[];
 		NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
-		name?: Prisma.StringNullableFilter<"User"> | string | null;
+		name?: Prisma.StringNullableFilter<'User'> | string | null;
 		posts?: Prisma.PostListRelationFilter;
 	},
-	"id" | "email"
+	'id' | 'email'
 >;
 
 export type UserOrderByWithAggregationInput = {
@@ -246,9 +246,9 @@ export type UserScalarWhereWithAggregatesInput = {
 	NOT?:
 		| Prisma.UserScalarWhereWithAggregatesInput
 		| Prisma.UserScalarWhereWithAggregatesInput[];
-	id?: Prisma.IntWithAggregatesFilter<"User"> | number;
-	email?: Prisma.StringWithAggregatesFilter<"User"> | string;
-	name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
+	id?: Prisma.IntWithAggregatesFilter<'User'> | number;
+	email?: Prisma.StringWithAggregatesFilter<'User'> | string;
+	name?: Prisma.StringNullableWithAggregatesFilter<'User'> | string | null;
 };
 
 export type UserCreateInput = {
@@ -466,7 +466,7 @@ export type UserSelect<
 		posts?: boolean | Prisma.User$postsArgs<ExtArgs>;
 		_count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 	},
-	ExtArgs["result"]["user"]
+	ExtArgs['result']['user']
 >;
 
 export type UserSelectCreateManyAndReturn<
@@ -478,7 +478,7 @@ export type UserSelectCreateManyAndReturn<
 		email?: boolean;
 		name?: boolean;
 	},
-	ExtArgs["result"]["user"]
+	ExtArgs['result']['user']
 >;
 
 export type UserSelectUpdateManyAndReturn<
@@ -490,7 +490,7 @@ export type UserSelectUpdateManyAndReturn<
 		email?: boolean;
 		name?: boolean;
 	},
-	ExtArgs["result"]["user"]
+	ExtArgs['result']['user']
 >;
 
 export type UserSelectScalar = {
@@ -503,8 +503,8 @@ export type UserOmit<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetOmit<
-	"id" | "email" | "name",
-	ExtArgs["result"]["user"]
+	'id' | 'email' | 'name',
+	ExtArgs['result']['user']
 >;
 export type UserInclude<
 	ExtArgs extends
@@ -526,7 +526,7 @@ export type $UserPayload<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
-	name: "User";
+	name: 'User';
 	objects: {
 		posts: Prisma.$PostPayload<ExtArgs>[];
 	};
@@ -536,7 +536,7 @@ export type $UserPayload<
 			email: string;
 			name: string | null;
 		},
-		ExtArgs["result"]["user"]
+		ExtArgs['result']['user']
 	>;
 	composites: {};
 };
@@ -548,7 +548,7 @@ export type UserGetPayload<
 export type UserCountArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
-> = Omit<UserFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
+> = Omit<UserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
 	select?: UserCountAggregateInputType | true;
 };
 
@@ -558,8 +558,8 @@ export interface UserDelegate<
 	GlobalOmitOptions = {},
 > {
 	[K: symbol]: {
-		types: Prisma.TypeMap<ExtArgs>["model"]["User"];
-		meta: { name: "User" };
+		types: Prisma.TypeMap<ExtArgs>['model']['User'];
+		meta: { name: 'User' };
 	};
 	/**
 	 * Find zero or one User that matches the filter.
@@ -578,7 +578,7 @@ export interface UserDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
 			T,
-			"findUnique",
+			'findUnique',
 			GlobalOmitOptions
 		> | null,
 		null,
@@ -604,7 +604,7 @@ export interface UserDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
 			T,
-			"findUniqueOrThrow",
+			'findUniqueOrThrow',
 			GlobalOmitOptions
 		>,
 		never,
@@ -631,7 +631,7 @@ export interface UserDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
 			T,
-			"findFirst",
+			'findFirst',
 			GlobalOmitOptions
 		> | null,
 		null,
@@ -659,7 +659,7 @@ export interface UserDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
 			T,
-			"findFirstOrThrow",
+			'findFirstOrThrow',
 			GlobalOmitOptions
 		>,
 		never,
@@ -689,7 +689,7 @@ export interface UserDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
 			T,
-			"findMany",
+			'findMany',
 			GlobalOmitOptions
 		>
 	>;
@@ -712,7 +712,7 @@ export interface UserDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
 			T,
-			"create",
+			'create',
 			GlobalOmitOptions
 		>,
 		never,
@@ -764,7 +764,7 @@ export interface UserDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
 			T,
-			"createManyAndReturn",
+			'createManyAndReturn',
 			GlobalOmitOptions
 		>
 	>;
@@ -787,7 +787,7 @@ export interface UserDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
 			T,
-			"delete",
+			'delete',
 			GlobalOmitOptions
 		>,
 		never,
@@ -816,7 +816,7 @@ export interface UserDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
 			T,
-			"update",
+			'update',
 			GlobalOmitOptions
 		>,
 		never,
@@ -895,7 +895,7 @@ export interface UserDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
 			T,
-			"updateManyAndReturn",
+			'updateManyAndReturn',
 			GlobalOmitOptions
 		>
 	>;
@@ -923,7 +923,7 @@ export interface UserDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$UserPayload<ExtArgs>,
 			T,
-			"upsert",
+			'upsert',
 			GlobalOmitOptions
 		>,
 		never,
@@ -947,10 +947,10 @@ export interface UserDelegate<
 	count<T extends UserCountArgs>(
 		args?: Prisma.Subset<T, UserCountArgs>,
 	): Prisma.PrismaPromise<
-		T extends runtime.Types.Utils.Record<"select", any>
-			? T["select"] extends true
+		T extends runtime.Types.Utils.Record<'select', any>
+			? T['select'] extends true
 				? number
-				: Prisma.GetScalarType<T["select"], UserCountAggregateOutputType>
+				: Prisma.GetScalarType<T['select'], UserCountAggregateOutputType>
 			: number
 	>;
 
@@ -1003,20 +1003,20 @@ export interface UserDelegate<
 	groupBy<
 		T extends UserGroupByArgs,
 		HasSelectOrTake extends Prisma.Or<
-			Prisma.Extends<"skip", Prisma.Keys<T>>,
-			Prisma.Extends<"take", Prisma.Keys<T>>
+			Prisma.Extends<'skip', Prisma.Keys<T>>,
+			Prisma.Extends<'take', Prisma.Keys<T>>
 		>,
 		OrderByArg extends Prisma.True extends HasSelectOrTake
-			? { orderBy: UserGroupByArgs["orderBy"] }
-			: { orderBy?: UserGroupByArgs["orderBy"] },
+			? { orderBy: UserGroupByArgs['orderBy'] }
+			: { orderBy?: UserGroupByArgs['orderBy'] },
 		OrderFields extends Prisma.ExcludeUnderscoreKeys<
-			Prisma.Keys<Prisma.MaybeTupleToUnion<T["orderBy"]>>
+			Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>
 		>,
-		ByFields extends Prisma.MaybeTupleToUnion<T["by"]>,
+		ByFields extends Prisma.MaybeTupleToUnion<T['by']>,
 		ByValid extends Prisma.Has<ByFields, OrderFields>,
-		HavingFields extends Prisma.GetHavingFields<T["having"]>,
+		HavingFields extends Prisma.GetHavingFields<T['having']>,
 		HavingValid extends Prisma.Has<ByFields, HavingFields>,
-		ByEmpty extends T["by"] extends never[] ? Prisma.True : Prisma.False,
+		ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False,
 		InputErrors extends ByEmpty extends Prisma.True
 			? `Error: "by" must not be empty.`
 			: HavingValid extends Prisma.False
@@ -1027,13 +1027,13 @@ export interface UserDelegate<
 								? `Error: Field "${P}" used in "having" needs to be provided in "by".`
 								: [
 										Error,
-										"Field ",
+										'Field ',
 										P,
 										` in "having" needs to be provided in "by"`,
 									];
 					}[HavingFields]
-				: "take" extends Prisma.Keys<T>
-					? "orderBy" extends Prisma.Keys<T>
+				: 'take' extends Prisma.Keys<T>
+					? 'orderBy' extends Prisma.Keys<T>
 						? ByValid extends Prisma.True
 							? {}
 							: {
@@ -1042,8 +1042,8 @@ export interface UserDelegate<
 										: `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
 								}[OrderFields]
 						: 'Error: If you provide "take", you also need to provide "orderBy"'
-					: "skip" extends Prisma.Keys<T>
-						? "orderBy" extends Prisma.Keys<T>
+					: 'skip' extends Prisma.Keys<T>
+						? 'orderBy' extends Prisma.Keys<T>
 							? ByValid extends Prisma.True
 								? {}
 								: {
@@ -1084,14 +1084,14 @@ export interface Prisma__UserClient<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 	GlobalOmitOptions = {},
 > extends Prisma.PrismaPromise<T> {
-	readonly [Symbol.toStringTag]: "PrismaPromise";
+	readonly [Symbol.toStringTag]: 'PrismaPromise';
 	posts<T extends Prisma.User$postsArgs<ExtArgs> = {}>(
 		args?: Prisma.Subset<T, Prisma.User$postsArgs<ExtArgs>>,
 	): Prisma.PrismaPromise<
 		| runtime.Types.Result.GetResult<
 				Prisma.$PostPayload<ExtArgs>,
 				T,
-				"findMany",
+				'findMany',
 				GlobalOmitOptions
 		  >
 		| Null
@@ -1138,9 +1138,9 @@ export interface Prisma__UserClient<
  * Fields of the User model
  */
 export interface UserFieldRefs {
-	readonly id: Prisma.FieldRef<"User", "Int">;
-	readonly email: Prisma.FieldRef<"User", "String">;
-	readonly name: Prisma.FieldRef<"User", "String">;
+	readonly id: Prisma.FieldRef<'User', 'Int'>;
+	readonly email: Prisma.FieldRef<'User', 'String'>;
+	readonly name: Prisma.FieldRef<'User', 'String'>;
 }
 
 // Custom InputTypes

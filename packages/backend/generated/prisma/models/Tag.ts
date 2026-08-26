@@ -7,9 +7,9 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client";
-import type * as $Enums from "../enums.js";
-import type * as Prisma from "../internal/prismaNamespace.js";
+import type * as runtime from '@prisma/client/runtime/client';
+import type * as $Enums from '../enums.js';
+import type * as Prisma from '../internal/prismaNamespace.js';
 
 /**
  * Model Tag
@@ -141,7 +141,7 @@ export type TagAggregateArgs<
 };
 
 export type GetTagAggregateType<T extends TagAggregateArgs> = {
-	[P in keyof T & keyof AggregateTag]: P extends "_count" | "count"
+	[P in keyof T & keyof AggregateTag]: P extends '_count' | 'count'
 		? T[P] extends true
 			? number
 			: Prisma.GetScalarType<T[P], AggregateTag[P]>
@@ -180,8 +180,8 @@ export type TagGroupByOutputType = {
 export type GetTagGroupByPayload<T extends TagGroupByArgs> =
 	Prisma.PrismaPromise<
 		Array<
-			Prisma.PickEnumerable<TagGroupByOutputType, T["by"]> & {
-				[P in keyof T & keyof TagGroupByOutputType]: P extends "_count"
+			Prisma.PickEnumerable<TagGroupByOutputType, T['by']> & {
+				[P in keyof T & keyof TagGroupByOutputType]: P extends '_count'
 					? T[P] extends boolean
 						? number
 						: Prisma.GetScalarType<T[P], TagGroupByOutputType[P]>
@@ -194,8 +194,8 @@ export type TagWhereInput = {
 	AND?: Prisma.TagWhereInput | Prisma.TagWhereInput[];
 	OR?: Prisma.TagWhereInput[];
 	NOT?: Prisma.TagWhereInput | Prisma.TagWhereInput[];
-	id?: Prisma.IntFilter<"Tag"> | number;
-	name?: Prisma.StringFilter<"Tag"> | string;
+	id?: Prisma.IntFilter<'Tag'> | number;
+	name?: Prisma.StringFilter<'Tag'> | string;
 	posts?: Prisma.PostListRelationFilter;
 };
 
@@ -214,7 +214,7 @@ export type TagWhereUniqueInput = Prisma.AtLeast<
 		NOT?: Prisma.TagWhereInput | Prisma.TagWhereInput[];
 		posts?: Prisma.PostListRelationFilter;
 	},
-	"id" | "name"
+	'id' | 'name'
 >;
 
 export type TagOrderByWithAggregationInput = {
@@ -235,8 +235,8 @@ export type TagScalarWhereWithAggregatesInput = {
 	NOT?:
 		| Prisma.TagScalarWhereWithAggregatesInput
 		| Prisma.TagScalarWhereWithAggregatesInput[];
-	id?: Prisma.IntWithAggregatesFilter<"Tag"> | number;
-	name?: Prisma.StringWithAggregatesFilter<"Tag"> | string;
+	id?: Prisma.IntWithAggregatesFilter<'Tag'> | number;
+	name?: Prisma.StringWithAggregatesFilter<'Tag'> | string;
 };
 
 export type TagCreateInput = {
@@ -439,8 +439,8 @@ export type TagScalarWhereInput = {
 	AND?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[];
 	OR?: Prisma.TagScalarWhereInput[];
 	NOT?: Prisma.TagScalarWhereInput | Prisma.TagScalarWhereInput[];
-	id?: Prisma.IntFilter<"Tag"> | number;
-	name?: Prisma.StringFilter<"Tag"> | string;
+	id?: Prisma.IntFilter<'Tag'> | number;
+	name?: Prisma.StringFilter<'Tag'> | string;
 };
 
 export type TagUpdateWithoutPostsInput = {
@@ -505,7 +505,7 @@ export type TagSelect<
 		posts?: boolean | Prisma.Tag$postsArgs<ExtArgs>;
 		_count?: boolean | Prisma.TagCountOutputTypeDefaultArgs<ExtArgs>;
 	},
-	ExtArgs["result"]["tag"]
+	ExtArgs['result']['tag']
 >;
 
 export type TagSelectCreateManyAndReturn<
@@ -516,7 +516,7 @@ export type TagSelectCreateManyAndReturn<
 		id?: boolean;
 		name?: boolean;
 	},
-	ExtArgs["result"]["tag"]
+	ExtArgs['result']['tag']
 >;
 
 export type TagSelectUpdateManyAndReturn<
@@ -527,7 +527,7 @@ export type TagSelectUpdateManyAndReturn<
 		id?: boolean;
 		name?: boolean;
 	},
-	ExtArgs["result"]["tag"]
+	ExtArgs['result']['tag']
 >;
 
 export type TagSelectScalar = {
@@ -538,7 +538,7 @@ export type TagSelectScalar = {
 export type TagOmit<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
-> = runtime.Types.Extensions.GetOmit<"id" | "name", ExtArgs["result"]["tag"]>;
+> = runtime.Types.Extensions.GetOmit<'id' | 'name', ExtArgs['result']['tag']>;
 export type TagInclude<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
@@ -559,7 +559,7 @@ export type $TagPayload<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = {
-	name: "Tag";
+	name: 'Tag';
 	objects: {
 		posts: Prisma.$PostPayload<ExtArgs>[];
 	};
@@ -568,7 +568,7 @@ export type $TagPayload<
 			id: number;
 			name: string;
 		},
-		ExtArgs["result"]["tag"]
+		ExtArgs['result']['tag']
 	>;
 	composites: {};
 };
@@ -580,7 +580,7 @@ export type TagGetPayload<
 export type TagCountArgs<
 	ExtArgs extends
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
-> = Omit<TagFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
+> = Omit<TagFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
 	select?: TagCountAggregateInputType | true;
 };
 
@@ -590,8 +590,8 @@ export interface TagDelegate<
 	GlobalOmitOptions = {},
 > {
 	[K: symbol]: {
-		types: Prisma.TypeMap<ExtArgs>["model"]["Tag"];
-		meta: { name: "Tag" };
+		types: Prisma.TypeMap<ExtArgs>['model']['Tag'];
+		meta: { name: 'Tag' };
 	};
 	/**
 	 * Find zero or one Tag that matches the filter.
@@ -610,7 +610,7 @@ export interface TagDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$TagPayload<ExtArgs>,
 			T,
-			"findUnique",
+			'findUnique',
 			GlobalOmitOptions
 		> | null,
 		null,
@@ -636,7 +636,7 @@ export interface TagDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$TagPayload<ExtArgs>,
 			T,
-			"findUniqueOrThrow",
+			'findUniqueOrThrow',
 			GlobalOmitOptions
 		>,
 		never,
@@ -663,7 +663,7 @@ export interface TagDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$TagPayload<ExtArgs>,
 			T,
-			"findFirst",
+			'findFirst',
 			GlobalOmitOptions
 		> | null,
 		null,
@@ -691,7 +691,7 @@ export interface TagDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$TagPayload<ExtArgs>,
 			T,
-			"findFirstOrThrow",
+			'findFirstOrThrow',
 			GlobalOmitOptions
 		>,
 		never,
@@ -721,7 +721,7 @@ export interface TagDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$TagPayload<ExtArgs>,
 			T,
-			"findMany",
+			'findMany',
 			GlobalOmitOptions
 		>
 	>;
@@ -744,7 +744,7 @@ export interface TagDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$TagPayload<ExtArgs>,
 			T,
-			"create",
+			'create',
 			GlobalOmitOptions
 		>,
 		never,
@@ -796,7 +796,7 @@ export interface TagDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$TagPayload<ExtArgs>,
 			T,
-			"createManyAndReturn",
+			'createManyAndReturn',
 			GlobalOmitOptions
 		>
 	>;
@@ -819,7 +819,7 @@ export interface TagDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$TagPayload<ExtArgs>,
 			T,
-			"delete",
+			'delete',
 			GlobalOmitOptions
 		>,
 		never,
@@ -848,7 +848,7 @@ export interface TagDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$TagPayload<ExtArgs>,
 			T,
-			"update",
+			'update',
 			GlobalOmitOptions
 		>,
 		never,
@@ -927,7 +927,7 @@ export interface TagDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$TagPayload<ExtArgs>,
 			T,
-			"updateManyAndReturn",
+			'updateManyAndReturn',
 			GlobalOmitOptions
 		>
 	>;
@@ -955,7 +955,7 @@ export interface TagDelegate<
 		runtime.Types.Result.GetResult<
 			Prisma.$TagPayload<ExtArgs>,
 			T,
-			"upsert",
+			'upsert',
 			GlobalOmitOptions
 		>,
 		never,
@@ -979,10 +979,10 @@ export interface TagDelegate<
 	count<T extends TagCountArgs>(
 		args?: Prisma.Subset<T, TagCountArgs>,
 	): Prisma.PrismaPromise<
-		T extends runtime.Types.Utils.Record<"select", any>
-			? T["select"] extends true
+		T extends runtime.Types.Utils.Record<'select', any>
+			? T['select'] extends true
 				? number
-				: Prisma.GetScalarType<T["select"], TagCountAggregateOutputType>
+				: Prisma.GetScalarType<T['select'], TagCountAggregateOutputType>
 			: number
 	>;
 
@@ -1035,20 +1035,20 @@ export interface TagDelegate<
 	groupBy<
 		T extends TagGroupByArgs,
 		HasSelectOrTake extends Prisma.Or<
-			Prisma.Extends<"skip", Prisma.Keys<T>>,
-			Prisma.Extends<"take", Prisma.Keys<T>>
+			Prisma.Extends<'skip', Prisma.Keys<T>>,
+			Prisma.Extends<'take', Prisma.Keys<T>>
 		>,
 		OrderByArg extends Prisma.True extends HasSelectOrTake
-			? { orderBy: TagGroupByArgs["orderBy"] }
-			: { orderBy?: TagGroupByArgs["orderBy"] },
+			? { orderBy: TagGroupByArgs['orderBy'] }
+			: { orderBy?: TagGroupByArgs['orderBy'] },
 		OrderFields extends Prisma.ExcludeUnderscoreKeys<
-			Prisma.Keys<Prisma.MaybeTupleToUnion<T["orderBy"]>>
+			Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>
 		>,
-		ByFields extends Prisma.MaybeTupleToUnion<T["by"]>,
+		ByFields extends Prisma.MaybeTupleToUnion<T['by']>,
 		ByValid extends Prisma.Has<ByFields, OrderFields>,
-		HavingFields extends Prisma.GetHavingFields<T["having"]>,
+		HavingFields extends Prisma.GetHavingFields<T['having']>,
 		HavingValid extends Prisma.Has<ByFields, HavingFields>,
-		ByEmpty extends T["by"] extends never[] ? Prisma.True : Prisma.False,
+		ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False,
 		InputErrors extends ByEmpty extends Prisma.True
 			? `Error: "by" must not be empty.`
 			: HavingValid extends Prisma.False
@@ -1059,13 +1059,13 @@ export interface TagDelegate<
 								? `Error: Field "${P}" used in "having" needs to be provided in "by".`
 								: [
 										Error,
-										"Field ",
+										'Field ',
 										P,
 										` in "having" needs to be provided in "by"`,
 									];
 					}[HavingFields]
-				: "take" extends Prisma.Keys<T>
-					? "orderBy" extends Prisma.Keys<T>
+				: 'take' extends Prisma.Keys<T>
+					? 'orderBy' extends Prisma.Keys<T>
 						? ByValid extends Prisma.True
 							? {}
 							: {
@@ -1074,8 +1074,8 @@ export interface TagDelegate<
 										: `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
 								}[OrderFields]
 						: 'Error: If you provide "take", you also need to provide "orderBy"'
-					: "skip" extends Prisma.Keys<T>
-						? "orderBy" extends Prisma.Keys<T>
+					: 'skip' extends Prisma.Keys<T>
+						? 'orderBy' extends Prisma.Keys<T>
 							? ByValid extends Prisma.True
 								? {}
 								: {
@@ -1116,14 +1116,14 @@ export interface Prisma__TagClient<
 		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 	GlobalOmitOptions = {},
 > extends Prisma.PrismaPromise<T> {
-	readonly [Symbol.toStringTag]: "PrismaPromise";
+	readonly [Symbol.toStringTag]: 'PrismaPromise';
 	posts<T extends Prisma.Tag$postsArgs<ExtArgs> = {}>(
 		args?: Prisma.Subset<T, Prisma.Tag$postsArgs<ExtArgs>>,
 	): Prisma.PrismaPromise<
 		| runtime.Types.Result.GetResult<
 				Prisma.$PostPayload<ExtArgs>,
 				T,
-				"findMany",
+				'findMany',
 				GlobalOmitOptions
 		  >
 		| Null
@@ -1170,8 +1170,8 @@ export interface Prisma__TagClient<
  * Fields of the Tag model
  */
 export interface TagFieldRefs {
-	readonly id: Prisma.FieldRef<"Tag", "Int">;
-	readonly name: Prisma.FieldRef<"Tag", "String">;
+	readonly id: Prisma.FieldRef<'Tag', 'Int'>;
+	readonly name: Prisma.FieldRef<'Tag', 'String'>;
 }
 
 // Custom InputTypes

@@ -1,16 +1,16 @@
-import pino from "pino";
-import type { LokiOptions } from "pino-loki";
+import pino from 'pino';
+import type { LokiOptions } from 'pino-loki';
 
-const level = process.env.LOG_LEVEL ?? "info";
-const service = process.env.SERVICE_NAME ?? "backend";
+const level = process.env.LOG_LEVEL ?? 'info';
+const service = process.env.SERVICE_NAME ?? 'backend';
 const lokiHost = process.env.LOKI_HOST;
 
 function buildLogger(name: string, type: string) {
 	const targets: pino.TransportTargetOptions[] = [
 		{
-			target: "pino-pretty",
+			target: 'pino-pretty',
 			level,
-			options: { colorize: true, translateTime: "SYS:standard" },
+			options: { colorize: true, translateTime: 'SYS:standard' },
 		},
 	];
 
@@ -18,7 +18,7 @@ function buildLogger(name: string, type: string) {
 	// running doesn't spam connection errors.
 	if (lokiHost) {
 		targets.push({
-			target: "pino-loki",
+			target: 'pino-loki',
 			level,
 			options: {
 				host: lokiHost,
@@ -26,7 +26,7 @@ function buildLogger(name: string, type: string) {
 				labels: {
 					type,
 					service_name: service,
-					env: process.env.NODE_ENV ?? "development",
+					env: process.env.NODE_ENV ?? 'development',
 				},
 				silenceErrors: true,
 			} satisfies LokiOptions,
@@ -39,6 +39,6 @@ function buildLogger(name: string, type: string) {
 	);
 }
 
-export const logger = buildLogger("GENERAL", "GENERAL");
-export const dbLogger = buildLogger("DB", "DB");
-export const apiLogger = buildLogger("API", "API");
+export const logger = buildLogger('GENERAL', 'GENERAL');
+export const dbLogger = buildLogger('DB', 'DB');
+export const apiLogger = buildLogger('API', 'API');

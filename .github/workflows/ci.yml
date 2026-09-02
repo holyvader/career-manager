@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: career_manager
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/career_manager
+      BETTER_AUTH_SECRET: ci-test-secret-do-not-use-in-production
+      BETTER_AUTH_URL: http://localhost:3334
+      FRONTEND_URL: http://localhost:3333
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.6
+      - run: bun install --frozen-lockfile
+      - name: Apply database migrations
+        working-directory: packages/backend
+        run: bunx --bun prisma migrate deploy
+      - name: Generate Prisma client
+        working-directory: packages/backend
+        run: bunx --bun prisma generate
+      - name: Typecheck
+        working-directory: packages/backend
+        run: bunx --bun tsc --noEmit
+      - name: Lint
+        working-directory: packages/backend
+        run: bunx biome check .
+      - name: Test
+        working-directory: packages/backend
+        run: bun test
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.6
+      - run: bun install --frozen-lockfile
+      - name: Typecheck
+        working-directory: packages/frontend
+        run: bunx --bun tsc --noEmit
+      - name: Lint
+        working-directory: packages/frontend
+        run: bunx biome check .
+      - name: Test
+        working-directory: packages/frontend
+        run: bun test
+      - name: Build
+        working-directory: packages/frontend
+        run: bun run build

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "test": "bun test"
   },
   "dependencies": {
     "@elysiajs/eden": "catalog:frontend",
@@ -23,10 +24,9 @@
     "@types/react-dom": "catalog:frontend-dev",
     "babel-plugin-react-compiler": "catalog:frontend-dev",
     "backend": "workspace:*",
+    "bun-types": "catalog:backend-dev",
     "daisyui": "catalog:frontend-dev",
     "postcss": "catalog:frontend-dev",
-    "postcss-preset-mantine": "catalog:frontend-dev",
-    "postcss-simple-vars": "catalog:frontend-dev",
     "tailwindcss": "catalog:frontend-dev",
     "typescript": "catalog:frontend-dev"
   },

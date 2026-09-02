@@ -9,7 +9,7 @@ import {
 } from '../email/templates';
 import { mailLogger } from '../tools/logger';
 
-config({ path: new URL('../.env', import.meta.url).pathname });
+config({ path: new URL('../../.env', import.meta.url).pathname });
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: 'postgresql' }),
@@ -31,6 +31,18 @@ export const auth = betterAuth({
       const { subject, text, html } = verificationEmailTemplate(url);
       await sendMail({ to: user.email, subject, text, html });
     },
+  },
+  // Enabled unconditionally (better-auth otherwise only turns this on when
+  // NODE_ENV=production, which nothing in this repo sets). Only actually
+  // protects better-auth's own mounted HTTP routes (.mount(auth.handler) in
+  // edenApp.ts) - it does NOT apply to direct auth.api.*() calls, which is
+  // what our typed authRpc.ts wrapper routes use (verified directly: this
+  // config has zero effect on /auth/signIn etc). Those routes have their
+  // own rate limiter instead - see routes/rateLimit.ts.
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 100,
   },
   advanced: {
     // better-auth awaits sendVerificationEmail/sendResetPassword before

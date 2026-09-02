@@ -1,4 +1,5 @@
 import { Elysia, t } from 'elysia';
+import { Prisma } from '../../../generated/prisma/client';
 import { prisma } from '../../db/prismaClient';
 import { apiLogger, dbLogger } from '../../tools/logger';
 import { authGuard } from './authGuard';
@@ -10,36 +11,38 @@ export const tagRoutes = new Elysia()
       where: { authorId: session.user.id },
     });
     if (!tags?.length) {
-      return status(404, { message: 'Tags not found ' });
+      return status(404, { message: 'Tags not found' });
     }
     return tags;
   })
   .post(
     '/tags',
     async ({ body, session, status }) => {
-      const tag = await prisma.tag
-        .create({
+      try {
+        const tag = await prisma.tag.create({
           data: {
             name: body.name,
             authorId: session.user.id,
           },
-        })
-        .catch((error) => {
-          dbLogger.error(
-            { err: error, name: body.name },
-            'Failed to create tag',
-          );
-          return null;
         });
-      if (!tag) {
+        apiLogger.info({ event: 'tag.created', tagId: tag.id }, 'Tag created');
+        return tag;
+      } catch (error) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002'
+        ) {
+          return status(409, {
+            message: 'You already have a tag with this name',
+          });
+        }
+        dbLogger.error({ err: error, name: body.name }, 'Failed to create tag');
         return status(400, 'Bad req');
       }
-      apiLogger.info({ event: 'tag.created', tagId: tag.id }, 'Tag created');
-      return tag;
     },
     {
       body: t.Object({
-        name: t.String(),
+        name: t.String({ minLength: 1, maxLength: 100 }),
       }),
     },
   )
@@ -127,7 +130,7 @@ export const tagRoutes = new Elysia()
       },
     });
     if (!tag) {
-      return status(404, { message: 'Tag not found ' });
+      return status(404, { message: 'Tag not found' });
     }
     return tag;
   });

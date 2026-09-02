@@ -81,9 +81,11 @@ model JobOffer {
   title         String
   url           String?
   content       String?
-  participant   User    @relation(fields: [participantId], references: [id])
+  participant   User    @relation(fields: [participantId], references: [id], onDelete: Cascade)
   participantId String
   tags          Tag[]
+
+  @@index([participantId])
 }
 
 model Tag {

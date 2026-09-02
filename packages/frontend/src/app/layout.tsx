@@ -1,4 +1,4 @@
-import { AppMenu, themeHtmlProps } from '@ds';
+import { themeHtmlProps } from '@ds';
 import type { Metadata } from 'next';
 import '@ds/theme/css/globals.css';
 

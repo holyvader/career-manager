@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia';
 import { auth } from './auth';
+import { isRateLimited } from './rateLimit';
 
 const userSchema = t.Object({
   id: t.String(),
@@ -29,6 +30,11 @@ const authErrorSchema = t.Object({
   code: t.Optional(t.String()),
 });
 
+const rateLimitedSchema = t.Object({ message: t.String() });
+const rateLimitedBody = () => ({
+  message: 'Too many requests, please try again later',
+});
+
 // Thin typed wrappers around better-auth's server-side auth.api.* calls, so
 // these actions participate in Elysia's route-type tree (and therefore Eden
 // Treaty) - unlike auth.handler mounted below in edenApp.ts, which better-auth
@@ -39,12 +45,16 @@ const authErrorSchema = t.Object({
 export const authRpc = new Elysia({ prefix: '/auth' })
   .post(
     '/signUp',
-    ({ body, request }) =>
-      auth.api.signUpEmail({
+    ({ body, request, status }) => {
+      if (isRateLimited(request, 'signUp', { windowMs: 10_000, max: 3 })) {
+        return status(429, rateLimitedBody());
+      }
+      return auth.api.signUpEmail({
         body,
         headers: request.headers,
         asResponse: true,
-      }),
+      });
+    },
     {
       body: t.Object({
         name: t.String(),
@@ -60,17 +70,22 @@ export const authRpc = new Elysia({ prefix: '/auth' })
         }),
         400: authErrorSchema,
         422: authErrorSchema,
+        429: rateLimitedSchema,
       },
     },
   )
   .post(
     '/signIn',
-    ({ body, request }) =>
-      auth.api.signInEmail({
+    ({ body, request, status }) => {
+      if (isRateLimited(request, 'signIn', { windowMs: 10_000, max: 3 })) {
+        return status(429, rateLimitedBody());
+      }
+      return auth.api.signInEmail({
         body,
         headers: request.headers,
         asResponse: true,
-      }),
+      });
+    },
     {
       body: t.Object({
         email: t.String({ format: 'email' }),
@@ -87,6 +102,7 @@ export const authRpc = new Elysia({ prefix: '/auth' })
         }),
         400: authErrorSchema,
         401: authErrorSchema,
+        429: rateLimitedSchema,
       },
     },
   )
@@ -105,12 +121,18 @@ export const authRpc = new Elysia({ prefix: '/auth' })
   )
   .post(
     '/forgotPassword',
-    ({ body, request }) =>
-      auth.api.requestPasswordReset({
+    ({ body, request, status }) => {
+      if (
+        isRateLimited(request, 'forgotPassword', { windowMs: 60_000, max: 3 })
+      ) {
+        return status(429, rateLimitedBody());
+      }
+      return auth.api.requestPasswordReset({
         body,
         headers: request.headers,
         asResponse: true,
-      }),
+      });
+    },
     {
       body: t.Object({
         email: t.String({ format: 'email' }),
@@ -119,17 +141,24 @@ export const authRpc = new Elysia({ prefix: '/auth' })
       response: {
         200: t.Object({ status: t.Literal(true), message: t.String() }),
         400: authErrorSchema,
+        429: rateLimitedSchema,
       },
     },
   )
   .post(
     '/resetPassword',
-    ({ body, request }) =>
-      auth.api.resetPassword({
+    ({ body, request, status }) => {
+      if (
+        isRateLimited(request, 'resetPassword', { windowMs: 60_000, max: 3 })
+      ) {
+        return status(429, rateLimitedBody());
+      }
+      return auth.api.resetPassword({
         body,
         headers: request.headers,
         asResponse: true,
-      }),
+      });
+    },
     {
       body: t.Object({
         newPassword: t.String({ minLength: 8 }),
@@ -139,6 +168,7 @@ export const authRpc = new Elysia({ prefix: '/auth' })
         200: t.Object({ status: t.Literal(true) }),
         400: authErrorSchema,
         401: authErrorSchema,
+        429: rateLimitedSchema,
       },
     },
   )

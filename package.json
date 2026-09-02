@@ -17,15 +17,14 @@
 		"app:lint:fix:unsafe": "biome lint --write --unsafe .",
 		"app:format": "biome format --write .",
 		"app:check": "biome check --write .",
-		"app:backend:docker:up": "docker compose -f docker-compose.backend.yml up",
-		"app:backend:docker:down": "docker compose -f docker-compose.backend.yml down",
-		"frontent:dev": "cd packages/frontend && bun dev",
+		"app:backend:docker:up": "docker compose -f docker-compose.yml up",
+		"app:backend:docker:down": "docker compose -f docker-compose.yml down",
+		"frontend:dev": "cd packages/frontend && bun dev",
 		"backend:dev": "cd packages/backend && bun dev"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.11",
-		"bun": "^1.4.0",
-		"turbo": "^2.10.12"
+		"bun": "^1.4.0"
 	},
 	"catalogs": {
 		"linting": {
@@ -45,8 +44,6 @@
 			"babel-plugin-react-compiler": "1.0.0",
 			"daisyui": "5.7.22",
 			"postcss": "8.5.26",
-			"postcss-preset-mantine": "1.18.0",
-			"postcss-simple-vars": "7.0.1",
 			"tailwindcss": "4.3.3",
 			"typescript": "7.0.2"
 		},
@@ -57,7 +54,7 @@
 			"@prisma/client": "^7.9.1",
 			"better-auth": "^1.7.1",
 			"dotenv": "^17.4.2",
-			"elysia": "latest",
+			"elysia": "^1.4.30",
 			"emailjs": "^5.0.3",
 			"pg": "^8.23.0",
 			"pino": "^10.3.1",
@@ -67,7 +64,7 @@
 		},
 		"backend-dev": {
 			"@types/pg": "^8.21.0",
-			"bun-types": "latest",
+			"bun-types": "^1.4.0",
 			"prisma": "^7.9.1",
 			"typescript": "7.0.2"
 		}

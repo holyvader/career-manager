@@ -19,7 +19,7 @@ export const meRoutes = new Elysia({ prefix: '/me' })
       },
     });
     if (!result) {
-      return status(404, { message: 'User not found ' });
+      return status(404, { message: 'User not found' });
     }
     return result;
   })
@@ -33,7 +33,7 @@ export const meRoutes = new Elysia({ prefix: '/me' })
       },
     });
     if (!offers.length) {
-      return status(404, { message: 'Job offers not found ' });
+      return status(404, { message: 'Job offers not found' });
     }
     return offers;
   })
@@ -67,9 +67,9 @@ export const meRoutes = new Elysia({ prefix: '/me' })
     },
     {
       body: t.Object({
-        title: t.String(),
-        url: t.Optional(t.String()),
-        content: t.Optional(t.String()),
+        title: t.String({ minLength: 1, maxLength: 200 }),
+        url: t.Optional(t.String({ format: 'uri', maxLength: 2048 })),
+        content: t.Optional(t.String({ maxLength: 10_000 })),
       }),
     },
   );

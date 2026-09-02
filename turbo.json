@@ -1,12 +1,17 @@
 {
 	"$schema": "https://turborepo.dev/schema.json",
+	"remoteCache": {
+		"enabled": false
+	},
+	"cacheDir": ".turbo",
 	"tasks": {
 		"build": {
 			"outputs": ["dist/**"]
 		},
 		"dev": {
 			"persistent": true,
-			"cache": false
+			"cache": false,
+			"dependsOn": ["app:backend:docker:up"]
 		},
 		"lint": {
 			"cache": false
@@ -15,6 +20,12 @@
 			"cache": false
 		},
 		"check": {
+			"cache": false
+		},
+		"app:backend:docker:up": {
+			"cache": false
+		},
+		"app:backend:docker:down": {
 			"cache": false
 		}
 	}

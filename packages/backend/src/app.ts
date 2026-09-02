@@ -1,5 +1,7 @@
+import { cors } from '@elysiajs/cors';
 import { config } from 'dotenv';
 import { Elysia, t } from 'elysia';
+import { auth } from './auth';
 import { prisma } from './db/prismaClient';
 import { apiLogger, dbLogger } from './tools/logger';
 
@@ -13,6 +15,13 @@ try {
 }
 
 const app = new Elysia()
+	.use(
+		cors({
+			origin: process.env.FRONTEND_URL ?? 'https://localhost:3000',
+			credentials: true,
+		}),
+	)
+	.mount(auth.handler)
 	.onRequest(({ request }) => {
 		apiLogger.info(
 			{ method: request.method, path: new URL(request.url).pathname },
@@ -159,7 +168,7 @@ const app = new Elysia()
 		}
 		return tag;
 	})
-	.listen(3000);
+	.listen(3333);
 
 apiLogger.info(
 	{ hostname: app.server?.hostname, port: app.server?.port },

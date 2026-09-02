@@ -1,40 +1,96 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.5.9/schema.json",
-	"vcs": {
-		"enabled": false,
-		"clientKind": "git",
-		"useIgnoreFile": false
-	},
-	"files": {
-		"ignoreUnknown": false,
-		"includes": ["packages/**/*"]
-	},
-	"formatter": {
-		"enabled": true,
-		"indentStyle": "tab"
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"preset": "recommended"
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "single"
-		}
-	},
-	"json": {
-		"parser": {
-			"allowComments": true
-		}
-	},
-	"assist": {
-		"enabled": true,
-		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
-		}
-	}
+  "$schema": "https://biomejs.dev/schemas/2.5.9/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": ["packages/**/*"]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended"
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "json": {
+    "parser": {
+      "allowComments": true
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "packages/frontend/**/*",
+        "!packages/frontend/src/design-system",
+        "!packages/frontend/node_modules",
+        "!packages/frontend/.next",
+        "!packages/frontend/dist",
+        "!packages/frontend/build"
+      ],
+      "linter": {
+        "enabled": true,
+        "rules": {
+          "recommended": true,
+          "style": {
+            "noRestrictedImports": {
+              "level": "on",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@mantine/*"]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "domains": {
+          "next": "recommended",
+          "react": "recommended"
+        }
+      }
+    },
+    {
+      "includes": ["packages/frontend/src/design-system/**/*"],
+      "linter": {
+        "enabled": true,
+        "rules": {
+          "recommended": true,
+          "style": {
+            "noRestrictedImports": "off"
+          }
+        },
+        "domains": {
+          "next": "recommended",
+          "react": "recommended"
+        }
+      }
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 {
-	"name": "elysia",
+	"name": "backend",
 	"version": "1.0.50",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
@@ -21,6 +21,7 @@
 		"prisma:format": "prisma format"
 	},
 	"dependencies": {
+		"@elysiajs/cors": "catalog:backend",
 		"@prisma/adapter-pg": "catalog:backend",
 		"@prisma/client": "catalog:backend",
 		"better-auth": "catalog:backend",

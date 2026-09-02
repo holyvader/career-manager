@@ -1,0 +1,40 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --experimental-https",
+    "build": "next build",
+    "start": "next start",
+    "lint": "biome check",
+    "format": "biome format --write"
+  },
+  "dependencies": {
+    "better-auth": "catalog:frontend",
+    "next": "catalog:frontend",
+    "react": "catalog:frontend",
+    "react-dom": "catalog:frontend"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:linting",
+    "@tailwindcss/postcss": "catalog:frontend-dev",
+    "@types/node": "catalog:frontend-dev",
+    "@types/react": "catalog:frontend-dev",
+    "@types/react-dom": "catalog:frontend-dev",
+    "babel-plugin-react-compiler": "catalog:frontend-dev",
+    "daisyui": "catalog:frontend-dev",
+    "postcss": "catalog:frontend-dev",
+    "postcss-preset-mantine": "catalog:frontend-dev",
+    "postcss-simple-vars": "catalog:frontend-dev",
+    "tailwindcss": "catalog:frontend-dev",
+    "typescript": "catalog:frontend-dev"
+  },
+  "ignoreScripts": [
+    "sharp",
+    "unrs-resolver"
+  ],
+  "trustedDependencies": [
+    "sharp",
+    "unrs-resolver"
+  ]
+}

@@ -17,11 +17,13 @@
 		"app:lint:fix:unsafe": "biome lint --write --unsafe .",
 		"app:format": "biome format --write .",
 		"app:check": "biome check --write .",
-		"app:backend:docker": "docker compose -f docker-compose.backend.yml up",
-		"app:backend:docker:down": "docker compose -f docker-compose.backend.yml down"
+		"app:backend:docker:up": "docker compose -f docker-compose.backend.yml up",
+		"app:backend:docker:down": "docker compose -f docker-compose.backend.yml down",
+		"frontent:dev": "cd packages/frontend && bun dev",
+		"backend:dev": "cd packages/backend && bun dev"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.5.9",
+		"@biomejs/biome": "^2.5.11",
 		"bun": "^1.4.0",
 		"turbo": "^2.10.12"
 	},
@@ -29,7 +31,27 @@
 		"linting": {
 			"@biomejs/biome": "^2.5.9"
 		},
+		"frontend": {
+			"better-auth": "^1.7.1",
+			"next": "^16.3.3",
+			"react": "^19.2.8",
+			"react-dom": "^19.2.8"
+		},
+		"frontend-dev": {
+			"@tailwindcss/postcss": "4.3.3",
+			"@types/node": "26.4.0",
+			"@types/react": "19.2.18",
+			"@types/react-dom": "19.2.5",
+			"babel-plugin-react-compiler": "1.0.0",
+			"daisyui": "5.7.22",
+			"postcss": "8.5.26",
+			"postcss-preset-mantine": "1.18.0",
+			"postcss-simple-vars": "7.0.1",
+			"tailwindcss": "4.3.3",
+			"typescript": "7.0.2"
+		},
 		"backend": {
+			"@elysiajs/cors": "^1.4.0",
 			"@prisma/adapter-pg": "^7.9.1",
 			"@prisma/client": "^7.9.1",
 			"better-auth": "^1.7.1",

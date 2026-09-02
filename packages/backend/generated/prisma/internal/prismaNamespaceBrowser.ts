@@ -22,15 +22,15 @@ export type * from './prismaNamespace.js';
 export const Decimal = runtime.Decimal;
 
 export const NullTypes = {
-	DbNull: runtime.NullTypes.DbNull as new (
-		secret: never,
-	) => typeof runtime.DbNull,
-	JsonNull: runtime.NullTypes.JsonNull as new (
-		secret: never,
-	) => typeof runtime.JsonNull,
-	AnyNull: runtime.NullTypes.AnyNull as new (
-		secret: never,
-	) => typeof runtime.AnyNull,
+  DbNull: runtime.NullTypes.DbNull as new (
+    secret: never,
+  ) => typeof runtime.DbNull,
+  JsonNull: runtime.NullTypes.JsonNull as new (
+    secret: never,
+  ) => typeof runtime.JsonNull,
+  AnyNull: runtime.NullTypes.AnyNull as new (
+    secret: never,
+  ) => typeof runtime.AnyNull,
 };
 /**
  * Helper for filtering JSON entries that have `null` on the database (empty on the db)
@@ -54,9 +54,12 @@ export const JsonNull = runtime.JsonNull;
 export const AnyNull = runtime.AnyNull;
 
 export const ModelName = {
-	User: 'User',
-	Post: 'Post',
-	Tag: 'Tag',
+  User: 'User',
+  Session: 'Session',
+  Account: 'Account',
+  Verification: 'Verification',
+  JobOffer: 'JobOffer',
+  Tag: 'Tag',
 } as const;
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -66,60 +69,131 @@ export type ModelName = (typeof ModelName)[keyof typeof ModelName];
  */
 
 export const TransactionIsolationLevel = runtime.makeStrictEnum({
-	ReadUncommitted: 'ReadUncommitted',
-	ReadCommitted: 'ReadCommitted',
-	RepeatableRead: 'RepeatableRead',
-	Serializable: 'Serializable',
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
+  Serializable: 'Serializable',
 } as const);
 
 export type TransactionIsolationLevel =
-	(typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
+  (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
 
 export const UserScalarFieldEnum = {
-	id: 'id',
-	email: 'email',
-	name: 'name',
+  id: 'id',
+  email: 'email',
+  emailVerified: 'emailVerified',
+  name: 'name',
+  image: 'image',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  links: 'links',
+  resume_link: 'resume_link',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
 } as const;
 
 export type UserScalarFieldEnum =
-	(typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
+  (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
 
-export const PostScalarFieldEnum = {
-	id: 'id',
-	title: 'title',
-	content: 'content',
-	published: 'published',
-	authorId: 'authorId',
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  expiresAt: 'expiresAt',
+  token: 'token',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  userId: 'userId',
 } as const;
 
-export type PostScalarFieldEnum =
-	(typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum];
+export type SessionScalarFieldEnum =
+  (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum];
+
+export const AccountScalarFieldEnum = {
+  id: 'id',
+  issuer: 'issuer',
+  accountId: 'accountId',
+  providerId: 'providerId',
+  userId: 'userId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  idToken: 'idToken',
+  accessTokenExpiresAt: 'accessTokenExpiresAt',
+  refreshTokenExpiresAt: 'refreshTokenExpiresAt',
+  scope: 'scope',
+  password: 'password',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type AccountScalarFieldEnum =
+  (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum];
+
+export const VerificationScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+} as const;
+
+export type VerificationScalarFieldEnum =
+  (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum];
+
+export const JobOfferScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  url: 'url',
+  content: 'content',
+  participantId: 'participantId',
+} as const;
+
+export type JobOfferScalarFieldEnum =
+  (typeof JobOfferScalarFieldEnum)[keyof typeof JobOfferScalarFieldEnum];
 
 export const TagScalarFieldEnum = {
-	id: 'id',
-	name: 'name',
+  id: 'id',
+  name: 'name',
 } as const;
 
 export type TagScalarFieldEnum =
-	(typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum];
+  (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum];
 
 export const SortOrder = {
-	asc: 'asc',
-	desc: 'desc',
+  asc: 'asc',
+  desc: 'desc',
 } as const;
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+} as const;
+
+export type NullableJsonNullValueInput =
+  (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput];
+
 export const QueryMode = {
-	default: 'default',
-	insensitive: 'insensitive',
+  default: 'default',
+  insensitive: 'insensitive',
 } as const;
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode];
 
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull,
+} as const;
+
+export type JsonNullValueFilter =
+  (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter];
+
 export const NullsOrder = {
-	first: 'first',
-	last: 'last',
+  first: 'first',
+  last: 'last',
 } as const;
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];

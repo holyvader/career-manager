@@ -39,11 +39,11 @@ export * from './enums.js';
  */
 export const PrismaClient = $Class.getPrismaClientClass();
 export type PrismaClient<
-	LogOpts extends Prisma.LogLevel = never,
-	OmitOpts extends
-		Prisma.PrismaClientOptions['omit'] = Prisma.PrismaClientOptions['omit'],
-	ExtArgs extends
-		runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
+  LogOpts extends Prisma.LogLevel = never,
+  OmitOpts extends
+    Prisma.PrismaClientOptions['omit'] = Prisma.PrismaClientOptions['omit'],
+  ExtArgs extends
+    runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs,
 > = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>;
 export { Prisma };
 
@@ -53,10 +53,25 @@ export { Prisma };
  */
 export type User = Prisma.UserModel;
 /**
- * Model Post
+ * Model Session
  *
  */
-export type Post = Prisma.PostModel;
+export type Session = Prisma.SessionModel;
+/**
+ * Model Account
+ *
+ */
+export type Account = Prisma.AccountModel;
+/**
+ * Model Verification
+ *
+ */
+export type Verification = Prisma.VerificationModel;
+/**
+ * Model JobOffer
+ *
+ */
+export type JobOffer = Prisma.JobOfferModel;
 /**
  * Model Tag
  *

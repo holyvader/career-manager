@@ -1,16 +1,18 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useActionState, useState } from 'react';
-import { authClient } from '@/lib/auth-client';
+import { edenClient } from '@/lib/eden-client';
 
 type Mode = 'login' | 'register';
 
 interface FormState {
   error: string | null;
+  registered: boolean;
 }
 
-const initialState: FormState = { error: null };
+const initialState: FormState = { error: null, registered: false };
 
 export function EnterForm() {
   const router = useRouter();
@@ -21,23 +23,38 @@ export function EnterForm() {
       const email = String(formData.get('email') ?? '');
       const password = String(formData.get('password') ?? '');
 
-      const { error } =
-        mode === 'login'
-          ? await authClient.signIn.email({ email, password })
-          : await authClient.signUp.email({
-              email,
-              password,
-              name: String(formData.get('name') ?? ''),
-            });
+      if (mode === 'login') {
+        const { error } = await edenClient.auth.signIn.post({
+          email,
+          password,
+        });
+        if (error) {
+          return {
+            error:
+              error.value?.message ?? 'Something went wrong. Please try again.',
+            registered: false,
+          };
+        }
+        router.push('/app');
+        return initialState;
+      }
+
+      const { error } = await edenClient.auth.signUp.post({
+        email,
+        password,
+        name: String(formData.get('name') ?? ''),
+        callbackURL: `${window.location.origin}/verify-email`,
+      });
 
       if (error) {
         return {
-          error: error.message ?? 'Something went wrong. Please try again.',
+          error:
+            error.value?.message ?? 'Something went wrong. Please try again.',
+          registered: false,
         };
       }
 
-      router.push('/app');
-      return initialState;
+      return { error: null, registered: true };
     },
     initialState,
   );
@@ -63,66 +80,84 @@ export function EnterForm() {
             </button>
           </div>
 
-          <form action={formAction} className="flex flex-col gap-3">
-            {mode === 'register' && (
+          {mode === 'register' && state.registered ? (
+            <div role="alert" className="d-alert d-alert-success text-sm">
+              <span>
+                Check your email for a link to verify your account before
+                logging in.
+              </span>
+            </div>
+          ) : (
+            <form action={formAction} className="flex flex-col gap-3">
+              {mode === 'register' && (
+                <label className="d-fieldset-label flex flex-col items-start gap-1">
+                  Name
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    autoComplete="name"
+                    className="d-input w-full"
+                    placeholder="Jane Doe"
+                  />
+                </label>
+              )}
+
               <label className="d-fieldset-label flex flex-col items-start gap-1">
-                Name
+                Email
                 <input
-                  type="text"
-                  name="name"
+                  type="email"
+                  name="email"
                   required
-                  autoComplete="name"
+                  autoComplete="email"
                   className="d-input w-full"
-                  placeholder="Jane Doe"
+                  placeholder="jane@example.com"
                 />
               </label>
-            )}
 
-            <label className="d-fieldset-label flex flex-col items-start gap-1">
-              Email
-              <input
-                type="email"
-                name="email"
-                required
-                autoComplete="email"
-                className="d-input w-full"
-                placeholder="jane@example.com"
-              />
-            </label>
+              <label className="d-fieldset-label flex flex-col items-start gap-1">
+                Password
+                <input
+                  type="password"
+                  name="password"
+                  required
+                  minLength={8}
+                  autoComplete={
+                    mode === 'login' ? 'current-password' : 'new-password'
+                  }
+                  className="d-input w-full"
+                  placeholder="••••••••"
+                />
+              </label>
 
-            <label className="d-fieldset-label flex flex-col items-start gap-1">
-              Password
-              <input
-                type="password"
-                name="password"
-                required
-                minLength={8}
-                autoComplete={
-                  mode === 'login' ? 'current-password' : 'new-password'
-                }
-                className="d-input w-full"
-                placeholder="••••••••"
-              />
-            </label>
+              {mode === 'login' && (
+                <Link
+                  href="/forgot-password"
+                  className="self-end text-xs text-neutral"
+                >
+                  Forgot password?
+                </Link>
+              )}
 
-            {state.error && (
-              <div role="alert" className="d-alert d-alert-error text-sm">
-                <span>{state.error}</span>
-              </div>
-            )}
+              {state.error && (
+                <div role="alert" className="d-alert d-alert-error text-sm">
+                  <span>{state.error}</span>
+                </div>
+              )}
 
-            <button
-              type="submit"
-              disabled={pending}
-              className="d-btn d-btn-primary mt-2"
-            >
-              {pending
-                ? 'Please wait…'
-                : mode === 'login'
-                  ? 'Log in'
-                  : 'Create account'}
-            </button>
-          </form>
+              <button
+                type="submit"
+                disabled={pending}
+                className="d-btn d-btn-primary mt-2"
+              >
+                {pending
+                  ? 'Please wait…'
+                  : mode === 'login'
+                    ? 'Log in'
+                    : 'Create account'}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>

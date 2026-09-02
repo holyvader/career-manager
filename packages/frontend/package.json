@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --experimental-https",
+    "dev": "next dev --port 3333",
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write"
   },
   "dependencies": {
-    "better-auth": "catalog:frontend",
+    "@elysiajs/eden": "catalog:frontend",
     "next": "catalog:frontend",
     "react": "catalog:frontend",
     "react-dom": "catalog:frontend"
@@ -22,6 +22,7 @@
     "@types/react": "catalog:frontend-dev",
     "@types/react-dom": "catalog:frontend-dev",
     "babel-plugin-react-compiler": "catalog:frontend-dev",
+    "backend": "workspace:*",
     "daisyui": "catalog:frontend-dev",
     "postcss": "catalog:frontend-dev",
     "postcss-preset-mantine": "catalog:frontend-dev",

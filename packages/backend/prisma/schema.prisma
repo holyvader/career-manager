@@ -27,6 +27,7 @@ model User {
   jobOffers     JobOffer[]
   sessions      Session[]
   accounts      Account[]
+  tags          Tag[]
 }
 
 model Session {
@@ -87,6 +88,10 @@ model JobOffer {
 
 model Tag {
   id        String     @id @default(uuid())
-  name      String     @unique
+  name      String
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
   jobOffers JobOffer[]
+
+  @@unique([authorId, name])
 }

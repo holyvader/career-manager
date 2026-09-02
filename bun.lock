@@ -15,11 +15,13 @@
       "version": "1.0.50",
       "dependencies": {
         "@elysiajs/cors": "catalog:backend",
+        "@elysiajs/openapi": "catalog:backend",
         "@prisma/adapter-pg": "catalog:backend",
         "@prisma/client": "catalog:backend",
         "better-auth": "catalog:backend",
         "dotenv": "catalog:backend",
         "elysia": "catalog:backend",
+        "emailjs": "catalog:backend",
         "pg": "catalog:backend",
         "pino": "catalog:backend",
         "pino-loki": "catalog:backend",
@@ -31,13 +33,14 @@
         "@types/pg": "catalog:backend-dev",
         "bun-types": "catalog:backend-dev",
         "prisma": "catalog:backend-dev",
+        "typescript": "catalog:backend-dev",
       },
     },
     "packages/frontend": {
       "name": "frontend",
       "version": "0.1.0",
       "dependencies": {
-        "better-auth": "catalog:frontend",
+        "@elysiajs/eden": "catalog:frontend",
         "next": "catalog:frontend",
         "react": "catalog:frontend",
         "react-dom": "catalog:frontend",
@@ -49,6 +52,7 @@
         "@types/react": "catalog:frontend-dev",
         "@types/react-dom": "catalog:frontend-dev",
         "babel-plugin-react-compiler": "catalog:frontend-dev",
+        "backend": "workspace:*",
         "daisyui": "catalog:frontend-dev",
         "postcss": "catalog:frontend-dev",
         "postcss-preset-mantine": "catalog:frontend-dev",
@@ -64,11 +68,13 @@
   "catalogs": {
     "backend": {
       "@elysiajs/cors": "^1.4.0",
+      "@elysiajs/openapi": "^1.4.16",
       "@prisma/adapter-pg": "^7.9.1",
       "@prisma/client": "^7.9.1",
       "better-auth": "^1.7.1",
       "dotenv": "^17.4.2",
       "elysia": "latest",
+      "emailjs": "^5.0.3",
       "pg": "^8.23.0",
       "pino": "^10.3.1",
       "pino-loki": "^3.0.0",
@@ -79,9 +85,10 @@
       "@types/pg": "^8.21.0",
       "bun-types": "latest",
       "prisma": "^7.9.1",
+      "typescript": "7.0.2",
     },
     "frontend": {
-      "better-auth": "^1.7.1",
+      "@elysiajs/eden": "^1.4.9",
       "next": "^16.3.3",
       "react": "^19.2.8",
       "react-dom": "^19.2.8",
@@ -157,6 +164,10 @@
     "@electric-sql/pglite-tools": ["@electric-sql/pglite-tools@0.3.3", "", { "peerDependencies": { "@electric-sql/pglite": "0.4.3" } }, "sha512-AlzLJTRJ8+UFgK8CmxIpyIpJ0+YaFw02IiOSdYrqxwPXdSyeIShz8aa9Tq+tYFXdPwcaMp/Fc80mQZ1dkOQ/wg=="],
 
     "@elysiajs/cors": ["@elysiajs/cors@1.4.2", "", { "peerDependencies": { "elysia": ">= 1.4.0" } }, "sha512-FTCcbH35brTLigF1W7BYySRZomgI/dBEMK9BgK9RP9Nez7zmpGh4koL/Yr1BFv8nYz7CfhRvcM8d/c+XnwMaVQ=="],
+
+    "@elysiajs/eden": ["@elysiajs/eden@1.4.9", "", { "peerDependencies": { "elysia": ">=1.4.19" } }, "sha512-3CKVD4ycVjB8nCNssfmhnUuq3SzSHkUES3v5PNCFr9LxIrx39/HVRAZ8z2sLxrFqzUs48dCBZaxoZzJ5UUVHDA=="],
+
+    "@elysiajs/openapi": ["@elysiajs/openapi@1.4.16", "", { "peerDependencies": { "@sinclair/typebox": ">= 0.34.0 < 1", "elysia": ">= 1.4.0", "typescript": ">= 5.0.0" } }, "sha512-kj8RBffE4J6myjm7nPPj6Dw1ujWt45NkdGW5sG9u3T0OfUzKN71s630/LEjajGo5jRZqFF3VHyk40lwXH2AbmQ=="],
 
     "@emnapi/runtime": ["@emnapi/runtime@1.11.3", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA=="],
 
@@ -607,6 +618,8 @@
     "elkjs": ["elkjs@0.11.1", "", {}, "sha512-zxxR9k+rx5ktMwT/FwyLdPCrq7xN6e4VGGHH8hA01vVYKjTFik7nHOxBnAYtrgYUB1RpAiLvA1/U2YraWxyKKg=="],
 
     "elysia": ["elysia@1.4.30", "", { "dependencies": { "cookie": "^1.1.1", "exact-mirror": "^0.2.7", "fast-decode-uri-component": "^1.0.1", "memoirist": "^0.4.0" }, "peerDependencies": { "@sinclair/typebox": ">= 0.34.0 < 1", "@types/bun": ">= 1.2.0", "file-type": ">= 20.0.0", "openapi-types": ">= 12.0.0", "typescript": ">= 5.0.0" }, "optionalPeers": ["@types/bun", "typescript"] }, "sha512-S2qqV0CbM4faB1hQQ5IYoeYnAUinjHlzRduxaBc4OoNqh0GjOc8k6tt3hv5ozWcG6Svr6hugw6JL4zNke4jwfA=="],
+
+    "emailjs": ["emailjs@5.0.3", "", { "peerDependencies": { "typescript": ">=5.0.0" }, "optionalPeers": ["typescript"] }, "sha512-Y47oNF5Geurb8GnmST2b+EK8mDLKoDFySxsvZb6YMcNbvdxpjd9FaLQ80p38lUVhq50knveOhkH/c/4afJSFxQ=="],
 
     "empathic": ["empathic@2.0.0", "", {}, "sha512-i6UzDscO/XfAcNYD75CfICkmfLedpyPDdozrLMmQc5ORaQcdMoc21OnlEylMIqI7U8eniKrPMxxtj8k0vhmJhA=="],
 

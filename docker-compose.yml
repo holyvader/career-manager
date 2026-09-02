@@ -45,5 +45,18 @@ services:
     depends_on:
       - loki
 
+  # SMTP server for the backend (see packages/backend/src/email). Accepts any
+  # mail on 1025 (no auth needed) and shows it in a web UI at
+  # http://localhost:8025 instead of delivering it anywhere - safe for local
+  # dev. Swap for a real SMTP relay's credentials in production via the
+  # backend's SMTP_* env vars.
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: career-manager-mailpit
+    restart: always
+    ports:
+      - 8025:8025
+      - 1025:1025
+
 volumes:
   grafana-data:

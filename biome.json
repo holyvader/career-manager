@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["packages/**/*"]
+    "includes": ["packages/**/*", "!packages/frontend/.next/**"]
   },
   "formatter": {
     "enabled": true,

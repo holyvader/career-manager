@@ -67,6 +67,7 @@ export const AppMenu = ({ title, items, onLogout, children }: AppMenuProps) => {
                     fill="none"
                     stroke="currentColor"
                     className="my-1.5 inline-block size-4"
+                    aria-hidden="true"
                   >
                     <path d="M9 12h12l-3 -3"></path>
                     <path d="M18 15l3 -3"></path>
@@ -93,6 +94,7 @@ export const AppMenu = ({ title, items, onLogout, children }: AppMenuProps) => {
                   fill="none"
                   stroke="currentColor"
                   className="my-1.5 inline-block size-4"
+                  aria-hidden="true"
                 >
                   <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
                   <path d="M9 4v16"></path>

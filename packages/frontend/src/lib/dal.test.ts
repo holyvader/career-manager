@@ -1,3 +1,4 @@
+/// <reference types="bun-types" />
 import { afterEach, describe, expect, it, mock } from 'bun:test';
 
 // One redirect scenario per file - dal.ts's verifySession is wrapped in

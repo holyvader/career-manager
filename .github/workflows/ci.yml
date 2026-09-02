@@ -28,7 +28,7 @@ jobs:
       BETTER_AUTH_URL: http://localhost:3334
       FRONTEND_URL: http://localhost:3333
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.3.6
@@ -51,12 +51,29 @@ jobs:
 
   frontend:
     runs-on: ubuntu-latest
+    env:
+      # Only needed so `prisma generate` (below) doesn't fail loading
+      # prisma.config.ts - nothing here actually connects to this database.
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/career_manager
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.3.6
       - run: bun install --frozen-lockfile
+      - name: Generate Prisma client
+        # The frontend imports the backend's Eden Treaty app type for its
+        # typed RPC client, which transitively references the (gitignored)
+        # generated Prisma client - needed here too, not just in the backend
+        # job, or tsc fails to resolve it.
+        working-directory: packages/backend
+        run: bunx --bun prisma generate
+      - name: Generate Next.js route types
+        # LayoutProps/PageProps and friends live in .next/types, which is
+        # gitignored and normally produced by `next dev`/`next build` - tsc
+        # fails without it on a fresh checkout.
+        working-directory: packages/frontend
+        run: bunx --bun next typegen
       - name: Typecheck
         working-directory: packages/frontend
         run: bunx --bun tsc --noEmit

@@ -7,7 +7,12 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["packages/**/*", "!packages/frontend/.next/**"]
+    "includes": [
+      "packages/**/*",
+      "!packages/frontend/.next/**",
+      "!packages/frontend/next-env.d.ts",
+      "!packages/backend/generated/**"
+    ]
   },
   "formatter": {
     "enabled": true,

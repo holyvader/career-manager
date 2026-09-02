@@ -1,3 +1,4 @@
+/// <reference types="bun-types" />
 import { afterEach, describe, expect, it, mock } from 'bun:test';
 
 describe('verifySession (has session)', () => {

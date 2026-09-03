@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
 import { Link } from '@ds';
+import { Suspense } from 'react';
 import { OfferEdit } from '@/app/app/offer/[id]/OfferEdit';
 import { SessionGate } from '@/app/app/SessionGate';
 

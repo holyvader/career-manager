@@ -1,11 +1,12 @@
 'use client';
 
-import Link from 'next/link';
+import type { Route } from 'next';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { Link } from '@ds/link/Link';
 
 interface AppMenuNavLinkProps {
-  href: string;
+  href: Route;
   label: string;
   icon: ReactNode;
 }

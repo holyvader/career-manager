@@ -1,9 +1,11 @@
-import type { ReactNode } from 'react';
+import type { Route } from 'next';
+import { type ReactNode, Suspense } from 'react';
+import { Button } from '@ds/button/Button';
 import { AppMenuNavLink } from './AppMenuNavLink';
 
 export interface AppMenuItem {
   label: string;
-  href: string;
+  href: Route;
   icon: ReactNode;
 }
 
@@ -40,20 +42,23 @@ export const AppMenu = ({ title, items, onLogout, children }: AppMenuProps) => {
         <div className="flex min-h-full flex-col items-start bg-base-200 d-is-drawer-close:w-14 d-is-drawer-open:w-64">
           {/* Sidebar content here */}
           <ul className="d-menu w-full grow">
-            {items.map((item) => (
-              <li key={item.href}>
-                <AppMenuNavLink
-                  href={item.href}
-                  label={item.label}
-                  icon={item.icon}
-                />
-              </li>
-            ))}
+            <Suspense fallback={null}>
+              {items.map((item) => (
+                <li key={item.href}>
+                  <AppMenuNavLink
+                    href={item.href}
+                    label={item.label}
+                    icon={item.icon}
+                  />
+                </li>
+              ))}
+            </Suspense>
 
             <li>
               <form action={onLogout}>
-                <button
+                <Button
                   type="submit"
+                  variant="none"
                   className="d-is-drawer-close:d-tooltip d-is-drawer-close:d-tooltip-right"
                   data-tip="Log out"
                 >
@@ -74,7 +79,7 @@ export const AppMenu = ({ title, items, onLogout, children }: AppMenuProps) => {
                     <path d="M14 8v-1a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-1"></path>
                   </svg>
                   <span className="d-is-drawer-close:hidden">Log out</span>
-                </button>
+                </Button>
               </form>
             </li>
 

@@ -2,7 +2,6 @@ import { config } from 'dotenv';
 import { Elysia } from 'elysia';
 import { prisma } from './db/prismaClient';
 import { edenApp } from './edenApp';
-import { protectedRoutes } from './routes/protected';
 import { apiLogger, dbLogger } from './tools/logger';
 
 config({ path: new URL('../.env', import.meta.url).pathname });
@@ -47,8 +46,7 @@ export const app = new Elysia()
       dbLogger.error({ err: error }, 'Health check failed');
       return status(503, { status: 'error' });
     }
-  })
-  .use(protectedRoutes);
+  });
 
 app.listen(3334);
 

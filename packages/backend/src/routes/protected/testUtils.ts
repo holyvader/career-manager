@@ -79,3 +79,17 @@ export function postJson(
     cookie,
   });
 }
+
+export function patchJson(
+  app: { handle: (request: Request) => Promise<Response> },
+  path: string,
+  body: unknown,
+  cookie?: string,
+) {
+  return jsonRequest(app, path, {
+    method: 'PATCH',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body),
+    cookie,
+  });
+}

@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from '@ds';
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
           interviews, and offers - so you always know where things stand and
           what to do next.
         </p>
-        <Link href="/app" className="d-btn d-btn-primary d-btn-lg">
+        <Link href="/enter" variant="primary" size="lg">
           Get started
         </Link>
       </main>

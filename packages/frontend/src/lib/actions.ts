@@ -21,5 +21,5 @@ export async function logout() {
   cookieStore.delete('better-auth.session_data');
   cookieStore.delete('better-auth.dont_remember');
 
-  redirect('/enter');
+  redirect('/');
 }

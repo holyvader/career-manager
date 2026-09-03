@@ -103,6 +103,16 @@ describe('tag routes', () => {
       );
       expect(dup.status).toBe(409);
     });
+
+    it('returns an empty array (not 404) when the caller has no tags', async () => {
+      const empty = await createTestUser('tag-test-empty');
+      const res = await jsonRequest(tagRoutes, '/tags', {
+        cookie: empty.cookie,
+      });
+      expect(res.status).toBe(200);
+      expect(await res.json()).toEqual([]);
+      await deleteTestUser(empty.id);
+    });
   });
 
   describe('GET /tag/:id', () => {
@@ -193,6 +203,110 @@ describe('tag routes', () => {
         userA.cookie,
       );
       expect(res.status).toBe(200);
+    });
+  });
+
+  describe('POST /tag/disconnect (IDOR checks)', () => {
+    it('rejects disconnecting a tag owned by someone else', async () => {
+      const bTag = await postJson(
+        tagRoutes,
+        '/tags',
+        { name: 'disconnect-guard-tag' },
+        userB.cookie,
+      );
+      const { id: bTagId } = (await bTag.json()) as { id: string };
+
+      const res = await postJson(
+        tagRoutes,
+        '/tag/disconnect',
+        { tagId: bTagId, jobOffers: [] },
+        userA.cookie,
+      );
+      expect(res.status).toBe(403);
+    });
+
+    it('allows disconnecting your own job offer from your own tag', async () => {
+      const { prisma } = await import('../../db/prismaClient');
+      const offer = await prisma.jobOffer.create({
+        data: { title: 'A disconnect offer', participantId: userA.id },
+      });
+
+      const tag = await postJson(
+        tagRoutes,
+        '/tags',
+        { name: 'legit-disconnect-tag' },
+        userA.cookie,
+      );
+      const { id: tagId } = (await tag.json()) as { id: string };
+
+      await postJson(
+        tagRoutes,
+        '/tag/connect',
+        { tagId, jobOffers: [offer.id] },
+        userA.cookie,
+      );
+
+      const res = await postJson(
+        tagRoutes,
+        '/tag/disconnect',
+        { tagId, jobOffers: [offer.id] },
+        userA.cookie,
+      );
+      expect(res.status).toBe(200);
+
+      const check = await jsonRequest(tagRoutes, `/tag/${tagId}`, {
+        cookie: userA.cookie,
+      });
+      const body = (await check.json()) as {
+        jobOffers: Array<{ title: string }>;
+      };
+      expect(body.jobOffers.some((o) => o.title === 'A disconnect offer')).toBe(
+        false,
+      );
+    });
+  });
+
+  describe('DELETE /tag/:id', () => {
+    it("returns 404 deleting another user's tag (no existence leak)", async () => {
+      const bTag = await postJson(
+        tagRoutes,
+        '/tags',
+        { name: 'delete-guard-tag' },
+        userB.cookie,
+      );
+      const { id: bTagId } = (await bTag.json()) as { id: string };
+
+      const res = await jsonRequest(tagRoutes, `/tag/${bTagId}`, {
+        method: 'DELETE',
+        cookie: userA.cookie,
+      });
+      expect(res.status).toBe(404);
+
+      const stillThere = await jsonRequest(tagRoutes, `/tag/${bTagId}`, {
+        cookie: userB.cookie,
+      });
+      expect(stillThere.status).toBe(200);
+    });
+
+    it('lets the owner delete their own tag', async () => {
+      const tag = await postJson(
+        tagRoutes,
+        '/tags',
+        { name: 'to-be-deleted' },
+        userA.cookie,
+      );
+      const { id } = (await tag.json()) as { id: string };
+
+      const res = await jsonRequest(tagRoutes, `/tag/${id}`, {
+        method: 'DELETE',
+        cookie: userA.cookie,
+      });
+      expect(res.status).toBe(200);
+
+      const gone = await jsonRequest(tagRoutes, `/tag/${id}`, {
+        cookie: userA.cookie,
+      });
+      expect(gone.status).toBe(404);
     });
   });
 });

@@ -3,13 +3,14 @@ import { openapi } from '@elysiajs/openapi';
 import { Elysia } from 'elysia';
 import { auth } from './routes/auth';
 import { authRpc } from './routes/authRpc';
+import { protectedRoutes } from './routes/protected';
 import { apiLogger } from './tools/logger';
 
-// Kept separate from app.ts: app.ts has pre-existing routes referencing a
-// Prisma model that no longer exists on the schema, so importing its type
-// from the frontend would drag those errors into the frontend's build. This
-// file's dependency graph has no such issues, so it's what the frontend's
-// Eden Treaty client imports `App` from.
+// This is what the frontend's Eden Treaty client imports `App` from, so
+// every route meant to be callable from the frontend must be `.use()`d here
+// (not just mounted on `app` in app.ts) - `.mount()`ed routes like
+// auth.handler below don't participate in Elysia's route-type tree either
+// way and stay invisible to Eden regardless.
 export const edenApp = new Elysia()
   .use(
     cors({
@@ -37,6 +38,7 @@ export const edenApp = new Elysia()
     return { message: 'Internal server error' };
   })
   .mount(auth.handler)
-  .use(authRpc);
+  .use(authRpc)
+  .use(protectedRoutes);
 
 export type App = typeof edenApp;

@@ -13,6 +13,20 @@ config({ path: new URL('../../.env', import.meta.url).pathname });
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: 'postgresql' }),
+  user: {
+    additionalFields: {
+      firstName: {
+        type: 'string',
+        required: false,
+        fieldName: 'first_name',
+      },
+      lastName: {
+        type: 'string',
+        required: false,
+        fieldName: 'last_name',
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3333",
+    "dev:debug": "next dev --port 3333 --inspect",
     "build": "next build",
     "start": "next start",
     "lint": "biome check",

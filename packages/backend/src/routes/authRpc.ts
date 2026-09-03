@@ -7,6 +7,8 @@ const userSchema = t.Object({
   email: t.String(),
   emailVerified: t.Boolean(),
   name: t.String(),
+  firstName: t.Optional(t.Union([t.String(), t.Null()])),
+  lastName: t.Optional(t.Union([t.String(), t.Null()])),
   image: t.Optional(t.Union([t.String(), t.Null()])),
   createdAt: t.String(),
   updatedAt: t.String(),
@@ -49,15 +51,22 @@ export const authRpc = new Elysia({ prefix: '/auth' })
       if (isRateLimited(request, 'signUp', { windowMs: 10_000, max: 3 })) {
         return status(429, rateLimitedBody());
       }
+      const { firstName, lastName, ...rest } = body;
       return auth.api.signUpEmail({
-        body,
+        body: {
+          name: `${firstName} ${lastName}`,
+          firstName,
+          lastName,
+          ...rest,
+        },
         headers: request.headers,
         asResponse: true,
       });
     },
     {
       body: t.Object({
-        name: t.String(),
+        firstName: t.String({ minLength: 1, maxLength: 100 }),
+        lastName: t.String({ minLength: 1, maxLength: 100 }),
         email: t.String({ format: 'email' }),
         password: t.String({ minLength: 8 }),
         image: t.Optional(t.String()),

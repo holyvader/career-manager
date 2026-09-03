@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { Suspense } from 'react';
+import { Link } from '@ds';
 import { ResetPasswordForm } from './ResetPasswordForm';
 
 interface ResetPasswordContentProps {

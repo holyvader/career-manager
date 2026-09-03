@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { useActionState } from 'react';
+import { Button, Input, Link } from '@ds';
 import { edenClient } from '@/lib/eden-client';
 
 interface FormState {
@@ -49,17 +49,15 @@ export function ForgotPasswordForm() {
             </div>
           ) : (
             <form action={formAction} className="flex flex-col gap-3">
-              <label className="d-fieldset-label flex flex-col items-start gap-1">
-                Email
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  autoComplete="email"
-                  className="d-input w-full"
-                  placeholder="jane@example.com"
-                />
-              </label>
+              <Input
+                type="email"
+                name="email"
+                label="Email"
+                required
+                autoComplete="email"
+                className="w-full"
+                placeholder="jane@example.com"
+              />
 
               {state.error && (
                 <div role="alert" className="d-alert d-alert-error text-sm">
@@ -67,13 +65,9 @@ export function ForgotPasswordForm() {
                 </div>
               )}
 
-              <button
-                type="submit"
-                disabled={pending}
-                className="d-btn d-btn-primary mt-2"
-              >
+              <Button type="submit" disabled={pending} className="mt-2">
                 {pending ? 'Please wait…' : 'Send reset link'}
-              </button>
+              </Button>
             </form>
           )}
 

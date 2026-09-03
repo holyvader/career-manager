@@ -1,4 +1,5 @@
 import { AppMenu, type AppMenuItem } from '@ds';
+import type { ReactNode } from 'react';
 import { logout } from '@/lib/actions';
 
 const items: AppMenuItem[] = [
@@ -44,9 +45,33 @@ const items: AppMenuItem[] = [
       </svg>
     ),
   },
+  {
+    label: 'Add Offer',
+    href: '/app/offer/new',
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        strokeWidth="2"
+        fill="none"
+        stroke="currentColor"
+        className="my-1.5 inline-block size-4"
+        aria-hidden="true"
+      >
+        <path d="M12 5v14"></path>
+        <path d="M5 12h14"></path>
+      </svg>
+    ),
+  },
 ];
 
-export default function AppLayout({ children }: LayoutProps<'/'>) {
+interface AppLayoutProps {
+  children: ReactNode;
+}
+
+export default function AppLayout({ children }: AppLayoutProps) {
   return (
     <AppMenu
       title={<h1 className="text-xl font-bold">Career Manager</h1>}

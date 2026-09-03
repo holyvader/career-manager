@@ -76,12 +76,20 @@ model Verification {
   @@index([identifier])
 }
 
+enum JobOfferStatus {
+  STARTED
+  IN_PROGRESS
+  HIRED
+  CANCELED
+}
+
 model JobOffer {
-  id            String  @id @default(uuid())
+  id            String         @id @default(uuid())
   title         String
   url           String?
   content       String?
-  participant   User    @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  status        JobOfferStatus @default(STARTED)
+  participant   User           @relation(fields: [participantId], references: [id], onDelete: Cascade)
   participantId String
   tags          Tag[]
 

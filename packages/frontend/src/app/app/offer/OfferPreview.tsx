@@ -14,7 +14,18 @@ interface OfferFormProps {
   offer: OfferData;
 }
 
+// Defense in depth alongside the backend's own scheme check (see
+// isHttpUrl in me.ts) - only ever render this as a clickable link when it's
+// plainly http(s), never javascript:/data:/anything else.
+function getSafeTrackingLink(trackingLink: string | null): string | null {
+  return trackingLink && /^https?:\/\//i.test(trackingLink)
+    ? trackingLink
+    : null;
+}
+
 export function OfferPreview({ offer }: OfferFormProps) {
+  const safeTrackingLink = getSafeTrackingLink(offer.trackingLink);
+
   return (
     <div className="flex flex-col gap-4">
       <h1 className="d-fieldset-label flex flex-col items-start gap-1">
@@ -41,6 +52,18 @@ export function OfferPreview({ offer }: OfferFormProps) {
         {offer.rate && <span>Rate: {offer.rate}</span>}
         {offer.availability && (
           <span>Availability: {offer.availability}</span>
+        )}
+        {safeTrackingLink && (
+          <span>
+            <a
+              href={safeTrackingLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="d-link"
+            >
+              Track application status
+            </a>
+          </span>
         )}
         {offer.contractType.length > 0 && (
           <span>

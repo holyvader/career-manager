@@ -39,8 +39,22 @@ const offerDetailFieldsSchema = {
   seniority: t.Optional(senioritySchema),
   rate: t.Optional(t.String({ maxLength: 100 })),
   availability: t.Optional(t.String({ maxLength: 100 })),
+  trackingLink: t.Optional(t.String({ format: 'uri', maxLength: 2048 })),
   contractType: t.Optional(t.Array(contractTypeSchema)),
 };
+
+// TypeBox's `format: 'uri'` only checks URI syntax - it happily accepts
+// `javascript:`/`data:` schemes, which would execute if ever rendered as a
+// clickable link (as `trackingLink` is, in OfferPreview.tsx). Reject
+// anything that isn't a plain http(s) link before it reaches the database.
+function isHttpUrl(value: string): boolean {
+  try {
+    const protocol = new URL(value).protocol;
+    return protocol === 'http:' || protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
 
 const linkSchema = t.Object({
   label: t.String({ minLength: 1, maxLength: 100 }),
@@ -170,6 +184,12 @@ export const meRoutes = new Elysia({ prefix: '/me' })
   .post(
     '/offers',
     async ({ body, session, status }) => {
+      if (body.url && !isHttpUrl(body.url)) {
+        return status(400, { message: 'url must be an http(s) URL' });
+      }
+      if (body.trackingLink && !isHttpUrl(body.trackingLink)) {
+        return status(400, { message: 'trackingLink must be an http(s) URL' });
+      }
       const offer = await prisma.jobOffer
         .create({
           data: {
@@ -182,6 +202,7 @@ export const meRoutes = new Elysia({ prefix: '/me' })
             seniority: body.seniority,
             rate: body.rate,
             availability: body.availability,
+            trackingLink: body.trackingLink,
             contractType: body.contractType,
             participantId: session.user.id,
           },
@@ -236,6 +257,12 @@ export const meRoutes = new Elysia({ prefix: '/me' })
       if (!current || current.participantId !== session.user.id) {
         return status(404, { message: 'Job offer not found' });
       }
+      if (body.url && !isHttpUrl(body.url)) {
+        return status(400, { message: 'url must be an http(s) URL' });
+      }
+      if (body.trackingLink && !isHttpUrl(body.trackingLink)) {
+        return status(400, { message: 'trackingLink must be an http(s) URL' });
+      }
 
       const offer = await prisma.jobOffer
         .update({
@@ -251,6 +278,7 @@ export const meRoutes = new Elysia({ prefix: '/me' })
             seniority: body.seniority,
             rate: body.rate,
             availability: body.availability,
+            trackingLink: body.trackingLink,
             contractType: body.contractType,
           },
           include: { tags: true },

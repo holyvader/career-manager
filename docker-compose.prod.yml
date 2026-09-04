@@ -1,0 +1,143 @@
+# Production stack: db + backend + frontend + caddy (reverse proxy/TLS),
+# all built from source.
+#
+# Usage:
+#   cp .env.production.example .env.production   # then fill in real values
+#   docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
+#
+# `caddy` is the only service exposed to the host (80/443) - it terminates
+# TLS and forwards to `frontend`/`backend` over the internal compose network
+# (see Caddyfile for the two domains that route to each). Automatic Let's
+# Encrypt TLS requires FRONTEND_DOMAIN/BACKEND_DOMAIN to be real domains
+# with DNS pointing at this server, and ports 80/443 reachable from the
+# internet - see the Caddyfile's own comments.
+#
+# Migrations run automatically on every backend container start (see
+# packages/backend/docker-entrypoint.sh) - nothing extra to run by hand.
+#
+# Observability (Loki + Grafana) is optional - it's excluded by default and
+# only starts with:
+#   docker compose -f docker-compose.prod.yml --env-file .env.production --profile observability up -d --build
+
+name: career-manager
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in your env file}
+      POSTGRES_DB: ${POSTGRES_DB:-career_manager}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-postgres}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # Not exposed to the host by default - only `backend` needs to reach it,
+    # over the compose network. Uncomment if you need direct host access
+    # (e.g. running psql/backups from outside the stack).
+    # ports:
+    #   - '5432:5432'
+
+  backend:
+    build:
+      context: .
+      dockerfile: packages/backend/Dockerfile
+      # No DATABASE_URL build arg here on purpose - `prisma generate` at
+      # build time never touches a real database (see the Dockerfile's own
+      # comment), so it always uses its own placeholder default regardless
+      # of what DATABASE_URL is set to below for the actual running service.
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?set BETTER_AUTH_SECRET in your env file}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      FRONTEND_URL: ${FRONTEND_URL}
+      NODE_ENV: production
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+      SMTP_TLS: ${SMTP_TLS:-}
+      SMTP_SSL: ${SMTP_SSL:-}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      LOKI_HOST: ${LOKI_HOST:-}
+    # No host port mapping - only `caddy` needs to reach this, over the
+    # compose network. Uncomment for direct access while debugging (bypasses
+    # the reverse proxy/TLS entirely - never leave this open in real prod).
+    # ports:
+    #   - '3334:3334'
+
+  frontend:
+    build:
+      context: .
+      dockerfile: packages/frontend/Dockerfile
+      args:
+        # Baked into the client bundle at build time - must be the real
+        # public URL the end user's BROWSER will use to reach the backend
+        # (a Docker-internal hostname like http://backend:3334 will NOT
+        # work here). Changing it requires rebuilding this image.
+        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+    restart: unless-stopped
+    depends_on:
+      - backend
+    # No host port mapping - only `caddy` needs to reach this. Same
+    # debugging escape hatch as `backend`, same caveat.
+    # ports:
+    #   - '3333:3333'
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - frontend
+      - backend
+    environment:
+      FRONTEND_DOMAIN: ${FRONTEND_DOMAIN:?set FRONTEND_DOMAIN in your env file}
+      BACKEND_DOMAIN: ${BACKEND_DOMAIN:?set BACKEND_DOMAIN in your env file}
+      CADDY_EMAIL: ${CADDY_EMAIL:-}
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp' # HTTP/3
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+  loki:
+    image: grafana/loki:3.3.2
+    restart: unless-stopped
+    profiles: [observability]
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - loki-data:/loki
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    restart: unless-stopped
+    profiles: [observability]
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?set GRAFANA_ADMIN_PASSWORD in your env file}
+    ports:
+      - '3200:3000'
+    volumes:
+      # Reuses the same provisioning config as local dev.
+      - ./packages/backend/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - loki
+
+volumes:
+  db-data:
+  caddy-data:
+  caddy-config:
+  loki-data:
+  grafana-data:

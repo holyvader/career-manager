@@ -72,6 +72,7 @@ interface OfferDetailFields {
   seniority: SeniorityLevel | undefined;
   rate: string | undefined;
   availability: string | undefined;
+  trackingLink: string | undefined;
   contractType: ContractType[];
 }
 
@@ -83,6 +84,7 @@ function getOfferDetailFields(formData: FormData): OfferDetailFields {
     seniority: parseEnum(SENIORITY_LEVELS, formData.get('seniority')),
     rate: String(formData.get('rate') ?? '') || undefined,
     availability: String(formData.get('availability') ?? '') || undefined,
+    trackingLink: String(formData.get('trackingLink') ?? '') || undefined,
     contractType: getContractTypes(formData),
   };
 }

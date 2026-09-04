@@ -1,0 +1,23 @@
+# Dependencies (reinstalled inside the image)
+node_modules
+**/node_modules
+
+# Build/generated output (regenerated inside the image)
+**/.next
+**/generated
+
+# Env files - never bake secrets into an image; pass them at runtime
+.env
+.env.*
+!.env.*.example
+
+# VCS / editor / OS cruft
+.git
+.gitignore
+.idea
+.DS_Store
+
+# Logs and local tooling caches
+*.log
+.biome-cache
+.turbo

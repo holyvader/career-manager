@@ -1,0 +1,24 @@
+# Reverse proxy + automatic TLS (Let's Encrypt) in front of the frontend and
+# backend containers. Caddy obtains and renews certificates on its own - no
+# certbot/cron needed - as long as:
+#   1. FRONTEND_DOMAIN and BACKEND_DOMAIN (below) are real domains you own,
+#      each with a DNS A/AAAA record pointing at this server's public IP.
+#   2. Ports 80 and 443 on this server are reachable from the internet
+#      (80 is needed for the ACME HTTP-01 challenge, not just a redirect).
+#
+# For a quick local smoke test without real domains/DNS, set both domain env
+# vars to `localhost` - Caddy detects that isn't a public name and falls
+# back to its own locally-trusted self-signed certificate instead of trying
+# Let's Encrypt.
+
+{
+	email {$CADDY_EMAIL:admin@example.com}
+}
+
+{$FRONTEND_DOMAIN:app.example.com} {
+	reverse_proxy frontend:3333
+}
+
+{$BACKEND_DOMAIN:api.example.com} {
+	reverse_proxy backend:3334
+}

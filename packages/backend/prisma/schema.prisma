@@ -117,6 +117,7 @@ model JobOffer {
   seniority     SeniorityLevel?
   rate          String?
   availability  String?
+  trackingLink  String?
   contractType  ContractType[]  @default([])
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @default(now()) @updatedAt

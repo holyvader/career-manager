@@ -19,6 +19,10 @@
 		"app:check": "biome check --write .",
 		"app:backend:docker:up": "docker compose -f docker-compose.yml up",
 		"app:backend:docker:down": "docker compose -f docker-compose.yml down",
+		"app:prod:build": "docker compose -f docker-compose.prod.yml --env-file .env.production build",
+		"app:prod:up": "docker compose -f docker-compose.prod.yml --env-file .env.production up -d",
+		"app:prod:down": "docker compose -f docker-compose.prod.yml --env-file .env.production down",
+		"app:prod:logs": "docker compose -f docker-compose.prod.yml --env-file .env.production logs -f",
 		"frontend:dev": "cd packages/frontend && bun dev",
 		"backend:dev": "cd packages/backend && bun dev"
 	},

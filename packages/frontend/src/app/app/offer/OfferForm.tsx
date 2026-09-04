@@ -39,6 +39,7 @@ export interface OfferData {
   seniority: SeniorityValue | null;
   rate: string | null;
   availability: string | null;
+  trackingLink: string | null;
   contractType: ContractTypeValue[];
   tags: TagOption[];
 }
@@ -114,6 +115,7 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
   const [location, setLocation] = useState(offer?.location ?? '');
   const [rate, setRate] = useState(offer?.rate ?? '');
   const [availability, setAvailability] = useState(offer?.availability ?? '');
+  const [trackingLink, setTrackingLink] = useState(offer?.trackingLink ?? '');
   const [selectedContractTypes, setSelectedContractTypes] = useState<
     Set<ContractTypeValue>
   >(() => new Set(offer?.contractType ?? []));
@@ -310,6 +312,16 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
             placeholder="Immediate"
           />
         </div>
+
+        <Input
+          type="url"
+          name="trackingLink"
+          label="Tracking link"
+          value={trackingLink}
+          onChange={(event) => setTrackingLink(event.target.value)}
+          className="w-full"
+          placeholder="https://company.example.com/careers/track/123"
+        />
 
         <div className="flex gap-2">
           <label className="d-fieldset-label flex flex-col items-start gap-1">

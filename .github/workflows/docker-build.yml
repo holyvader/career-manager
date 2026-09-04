@@ -1,0 +1,35 @@
+name: Docker build (production images)
+
+# Manually triggered only for now (Actions tab -> Run workflow) - not run
+# automatically on push/PR, unlike ci.yml. Build-only smoke test for
+# packages/backend/Dockerfile and packages/frontend/Dockerfile so a future
+# change can't silently break the production build (e.g. the Bun/arm64
+# Turbopack segfault worked around in packages/frontend/Dockerfile) without
+# anyone noticing. Doesn't push anywhere - no registry/credentials needed.
+on:
+  workflow_dispatch:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: packages/backend/Dockerfile
+          push: false
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: packages/frontend/Dockerfile
+          push: false
+          build-args: |
+            NEXT_PUBLIC_BACKEND_URL=https://api.example.com

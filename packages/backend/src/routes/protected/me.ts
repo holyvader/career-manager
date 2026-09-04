@@ -7,8 +7,40 @@ const jobOfferStatusSchema = t.Union([
   t.Literal('STARTED'),
   t.Literal('IN_PROGRESS'),
   t.Literal('HIRED'),
+  t.Literal('REJECTED'),
   t.Literal('CANCELED'),
 ]);
+
+const contractTypeSchema = t.Union([
+  t.Literal('EMPLOYMENT_CONTRACT'),
+  t.Literal('B2B'),
+  t.Literal('MANDATE_CONTRACT'),
+  t.Literal('CONTRACT_FOR_SPECIFIC_WORK'),
+  t.Literal('INTERNSHIP'),
+]);
+
+const remoteTypeSchema = t.Union([
+  t.Literal('REMOTE'),
+  t.Literal('HYBRID'),
+  t.Literal('ONSITE'),
+]);
+
+const senioritySchema = t.Union([
+  t.Literal('JUNIOR'),
+  t.Literal('MID'),
+  t.Literal('SENIOR'),
+  t.Literal('LEAD'),
+]);
+
+const offerDetailFieldsSchema = {
+  companyName: t.Optional(t.String({ maxLength: 200 })),
+  location: t.Optional(t.String({ maxLength: 200 })),
+  remoteType: t.Optional(remoteTypeSchema),
+  seniority: t.Optional(senioritySchema),
+  rate: t.Optional(t.String({ maxLength: 100 })),
+  availability: t.Optional(t.String({ maxLength: 100 })),
+  contractType: t.Optional(t.Array(contractTypeSchema)),
+};
 
 const linkSchema = t.Object({
   label: t.String({ minLength: 1, maxLength: 100 }),
@@ -94,16 +126,47 @@ export const meRoutes = new Elysia({ prefix: '/me' })
       }),
     },
   )
-  .get('/offers', async ({ session }) => {
-    return prisma.jobOffer.findMany({
-      where: {
-        participantId: session.user.id,
-      },
-      include: {
-        tags: true,
-      },
-    });
-  })
+  .get(
+    '/offers',
+    async ({
+      session,
+      query: { q, tagIds, contractType, seniority, remoteType, sort },
+    }) => {
+      return prisma.jobOffer.findMany({
+        where: {
+          participantId: session.user.id,
+          ...(q && {
+            OR: [
+              { title: { contains: q, mode: 'insensitive' } },
+              { content: { contains: q, mode: 'insensitive' } },
+              { companyName: { contains: q, mode: 'insensitive' } },
+              { location: { contains: q, mode: 'insensitive' } },
+            ],
+          }),
+          ...(tagIds?.length && { tags: { some: { id: { in: tagIds } } } }),
+          ...(contractType?.length && {
+            contractType: { hasSome: contractType },
+          }),
+          ...(seniority?.length && { seniority: { in: seniority } }),
+          ...(remoteType?.length && { remoteType: { in: remoteType } }),
+        },
+        orderBy: { createdAt: sort === 'oldest' ? 'asc' : 'desc' },
+        include: {
+          tags: true,
+        },
+      });
+    },
+    {
+      query: t.Object({
+        q: t.Optional(t.String({ maxLength: 200 })),
+        tagIds: t.Optional(t.Array(t.String())),
+        contractType: t.Optional(t.Array(contractTypeSchema)),
+        seniority: t.Optional(t.Array(senioritySchema)),
+        remoteType: t.Optional(t.Array(remoteTypeSchema)),
+        sort: t.Optional(t.Union([t.Literal('newest'), t.Literal('oldest')])),
+      }),
+    },
+  )
   .post(
     '/offers',
     async ({ body, session, status }) => {
@@ -113,6 +176,13 @@ export const meRoutes = new Elysia({ prefix: '/me' })
             title: body.title,
             url: body.url,
             content: body.content,
+            companyName: body.companyName,
+            location: body.location,
+            remoteType: body.remoteType,
+            seniority: body.seniority,
+            rate: body.rate,
+            availability: body.availability,
+            contractType: body.contractType,
             participantId: session.user.id,
           },
         })
@@ -137,6 +207,7 @@ export const meRoutes = new Elysia({ prefix: '/me' })
         title: t.String({ minLength: 1, maxLength: 200 }),
         url: t.Optional(t.String({ format: 'uri', maxLength: 2048 })),
         content: t.Optional(t.String({ maxLength: 10_000 })),
+        ...offerDetailFieldsSchema,
       }),
     },
   )
@@ -174,6 +245,13 @@ export const meRoutes = new Elysia({ prefix: '/me' })
             url: body.url,
             content: body.content,
             status: body.status,
+            companyName: body.companyName,
+            location: body.location,
+            remoteType: body.remoteType,
+            seniority: body.seniority,
+            rate: body.rate,
+            availability: body.availability,
+            contractType: body.contractType,
           },
           include: { tags: true },
         })
@@ -199,6 +277,7 @@ export const meRoutes = new Elysia({ prefix: '/me' })
         url: t.Optional(t.String({ format: 'uri', maxLength: 2048 })),
         content: t.Optional(t.String({ maxLength: 10_000 })),
         status: t.Optional(jobOfferStatusSchema),
+        ...offerDetailFieldsSchema,
       }),
     },
   );

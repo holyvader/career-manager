@@ -1,21 +1,14 @@
 'use client';
 
 import { Chip } from '@ds';
-import { STATUS_CHIP_VARIANT, STATUS_LABELS } from '@/app/app/offer/OfferForm';
-
-export interface TagOption {
-  id: string;
-  name: string;
-}
-
-export interface OfferData {
-  id: string;
-  title: string;
-  content: string | null;
-  url: string | null;
-  status: 'STARTED' | 'IN_PROGRESS' | 'HIRED' | 'CANCELED';
-  tags: TagOption[];
-}
+import {
+  CONTRACT_TYPE_LABELS,
+  type OfferData,
+  REMOTE_TYPE_LABELS,
+  SENIORITY_LABELS,
+  STATUS_CHIP_VARIANT,
+  STATUS_LABELS,
+} from '@/app/app/offer/OfferForm';
 
 interface OfferFormProps {
   offer: OfferData;
@@ -36,6 +29,28 @@ export function OfferPreview({ offer }: OfferFormProps) {
           {STATUS_LABELS[offer.status]}
         </Chip>
       )}
+      <div className="flex flex-col gap-1 text-sm">
+        {offer.companyName && <span>Company: {offer.companyName}</span>}
+        {offer.location && <span>Location: {offer.location}</span>}
+        {offer.remoteType && (
+          <span>Remote type: {REMOTE_TYPE_LABELS[offer.remoteType]}</span>
+        )}
+        {offer.seniority && (
+          <span>Seniority: {SENIORITY_LABELS[offer.seniority]}</span>
+        )}
+        {offer.rate && <span>Rate: {offer.rate}</span>}
+        {offer.availability && (
+          <span>Availability: {offer.availability}</span>
+        )}
+        {offer.contractType.length > 0 && (
+          <span>
+            Contract type:{' '}
+            {offer.contractType
+              .map((type) => CONTRACT_TYPE_LABELS[type])
+              .join(', ')}
+          </span>
+        )}
+      </div>
       <pre>{offer?.content ?? ''}</pre>
       <pre>{offer.tags.map((it) => it.name).join(', ')}</pre>
     </div>

@@ -175,6 +175,144 @@ describe('me routes', () => {
     });
   });
 
+  describe('offer detail fields', () => {
+    it('round-trips new detail fields through create/update', async () => {
+      const create = await postJson(
+        meRoutes,
+        '/me/offers',
+        {
+          title: 'Offer with details',
+          companyName: 'Acme',
+          location: 'Warsaw',
+          remoteType: 'HYBRID',
+          seniority: 'SENIOR',
+          rate: '20-25k PLN/mo',
+          availability: 'Immediate',
+          contractType: ['B2B', 'EMPLOYMENT_CONTRACT'],
+        },
+        userA.cookie,
+      );
+      expect(create.status).toBe(200);
+      const created = (await create.json()) as {
+        id: string;
+        companyName: string;
+        location: string;
+        remoteType: string;
+        seniority: string;
+        rate: string;
+        availability: string;
+        contractType: string[];
+      };
+      expect(created.companyName).toBe('Acme');
+      expect(created.location).toBe('Warsaw');
+      expect(created.remoteType).toBe('HYBRID');
+      expect(created.seniority).toBe('SENIOR');
+      expect(created.rate).toBe('20-25k PLN/mo');
+      expect(created.availability).toBe('Immediate');
+      expect([...created.contractType].sort()).toEqual(
+        ['B2B', 'EMPLOYMENT_CONTRACT'].sort(),
+      );
+
+      const update = await patchJson(
+        meRoutes,
+        `/me/offers/${created.id}`,
+        { companyName: 'Acme Corp', contractType: ['INTERNSHIP'] },
+        userA.cookie,
+      );
+      const updated = (await update.json()) as {
+        companyName: string;
+        contractType: string[];
+      };
+      expect(updated.companyName).toBe('Acme Corp');
+      expect(updated.contractType).toEqual(['INTERNSHIP']);
+    });
+  });
+
+  describe('GET /me/offers filtering and sorting', () => {
+    it('filters by q across title/content/companyName/location, filters by contractType (OR), and sorts by createdAt', async () => {
+      const user = await createTestUser('me-test-filters');
+
+      await postJson(
+        meRoutes,
+        '/me/offers',
+        { title: 'Frontend role', companyName: 'Widgets Inc', contractType: ['B2B'] },
+        user.cookie,
+      );
+      await postJson(
+        meRoutes,
+        '/me/offers',
+        {
+          title: 'Backend role',
+          companyName: 'Gadgets Ltd',
+          location: 'Krakow',
+          contractType: ['EMPLOYMENT_CONTRACT'],
+        },
+        user.cookie,
+      );
+      await postJson(
+        meRoutes,
+        '/me/offers',
+        {
+          title: 'Data role',
+          content: 'search for widgets everywhere',
+          contractType: ['INTERNSHIP'],
+        },
+        user.cookie,
+      );
+
+      const byTitle = await jsonRequest(meRoutes, '/me/offers?q=Frontend', {
+        cookie: user.cookie,
+      });
+      const byTitleOffers = (await byTitle.json()) as Array<{ title: string }>;
+      expect(byTitleOffers.map((o) => o.title)).toEqual(['Frontend role']);
+
+      const byCompany = await jsonRequest(meRoutes, '/me/offers?q=Gadgets', {
+        cookie: user.cookie,
+      });
+      const byCompanyOffers = (await byCompany.json()) as Array<{
+        title: string;
+      }>;
+      expect(byCompanyOffers.map((o) => o.title)).toEqual(['Backend role']);
+
+      const byContent = await jsonRequest(meRoutes, '/me/offers?q=widgets', {
+        cookie: user.cookie,
+      });
+      const byContentOffers = (await byContent.json()) as Array<{
+        title: string;
+      }>;
+      expect(byContentOffers.map((o) => o.title).sort()).toEqual(
+        ['Data role', 'Frontend role'].sort(),
+      );
+
+      const byContract = await jsonRequest(
+        meRoutes,
+        '/me/offers?contractType=B2B&contractType=INTERNSHIP',
+        { cookie: user.cookie },
+      );
+      const byContractOffers = (await byContract.json()) as Array<{
+        title: string;
+      }>;
+      expect(byContractOffers.map((o) => o.title).sort()).toEqual(
+        ['Data role', 'Frontend role'].sort(),
+      );
+
+      const all = await jsonRequest(meRoutes, '/me/offers', {
+        cookie: user.cookie,
+      });
+      const allOffers = (await all.json()) as Array<{ title: string }>;
+      expect(allOffers).toHaveLength(3);
+      expect(allOffers[0]?.title).toBe('Data role');
+
+      const oldest = await jsonRequest(meRoutes, '/me/offers?sort=oldest', {
+        cookie: user.cookie,
+      });
+      const oldestOffers = (await oldest.json()) as Array<{ title: string }>;
+      expect(oldestOffers[0]?.title).toBe('Frontend role');
+
+      await deleteTestUser(user.id);
+    });
+  });
+
   describe('PATCH /me (profile)', () => {
     it('updates profile fields and keeps `name` in sync', async () => {
       const res = await patchJson(

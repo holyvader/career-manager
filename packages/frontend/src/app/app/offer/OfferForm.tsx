@@ -1,7 +1,7 @@
 'use client';
 
 import { type FormEvent, useActionState, useState } from 'react';
-import { Button, type ChipVariant, Input, Loader, Tag } from '@ds';
+import { Button, type ChipVariant, Input, Loader, Modal, Tag } from '@ds';
 import {
   createOfferAction,
   createTagAction,
@@ -16,12 +16,30 @@ export interface TagOption {
   name: string;
 }
 
+export type ContractTypeValue =
+  | 'EMPLOYMENT_CONTRACT'
+  | 'B2B'
+  | 'MANDATE_CONTRACT'
+  | 'CONTRACT_FOR_SPECIFIC_WORK'
+  | 'INTERNSHIP';
+
+export type RemoteTypeValue = 'REMOTE' | 'HYBRID' | 'ONSITE';
+
+export type SeniorityValue = 'JUNIOR' | 'MID' | 'SENIOR' | 'LEAD';
+
 export interface OfferData {
   id: string;
   title: string;
   content: string | null;
   url: string | null;
-  status: 'STARTED' | 'IN_PROGRESS' | 'HIRED' | 'CANCELED';
+  status: 'STARTED' | 'IN_PROGRESS' | 'HIRED' | 'REJECTED' | 'CANCELED';
+  companyName: string | null;
+  location: string | null;
+  remoteType: RemoteTypeValue | null;
+  seniority: SeniorityValue | null;
+  rate: string | null;
+  availability: string | null;
+  contractType: ContractTypeValue[];
   tags: TagOption[];
 }
 
@@ -35,6 +53,7 @@ export const STATUS_LABELS: Record<OfferData['status'], string> = {
   STARTED: 'Started',
   IN_PROGRESS: 'In progress',
   HIRED: 'Hired',
+  REJECTED: 'Rejected',
   CANCELED: 'Canceled',
 };
 
@@ -42,8 +61,34 @@ export const STATUS_CHIP_VARIANT: Record<OfferData['status'], ChipVariant> = {
   STARTED: 'neutral',
   IN_PROGRESS: 'info',
   HIRED: 'success',
+  REJECTED: 'warning',
   CANCELED: 'error',
 };
+
+export const CONTRACT_TYPE_LABELS: Record<ContractTypeValue, string> = {
+  EMPLOYMENT_CONTRACT: 'Employment contract',
+  B2B: 'B2B',
+  MANDATE_CONTRACT: 'Mandate contract',
+  CONTRACT_FOR_SPECIFIC_WORK: 'Contract for specific work',
+  INTERNSHIP: 'Internship',
+};
+
+export const REMOTE_TYPE_LABELS: Record<RemoteTypeValue, string> = {
+  REMOTE: 'Remote',
+  HYBRID: 'Hybrid',
+  ONSITE: 'On-site',
+};
+
+export const SENIORITY_LABELS: Record<SeniorityValue, string> = {
+  JUNIOR: 'Junior',
+  MID: 'Mid',
+  SENIOR: 'Senior',
+  LEAD: 'Lead',
+};
+
+const CONTRACT_TYPE_VALUES = Object.keys(
+  CONTRACT_TYPE_LABELS,
+) as ContractTypeValue[];
 
 const initialState: OfferFormState = { error: null };
 
@@ -60,6 +105,18 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
   const [content, setContent] = useState(offer?.content ?? '');
   const [isFetchingUrl, setIsFetchingUrl] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [reviewDraft, setReviewDraft] = useState<{
+    title: string;
+    content: string;
+  } | null>(null);
+
+  const [companyName, setCompanyName] = useState(offer?.companyName ?? '');
+  const [location, setLocation] = useState(offer?.location ?? '');
+  const [rate, setRate] = useState(offer?.rate ?? '');
+  const [availability, setAvailability] = useState(offer?.availability ?? '');
+  const [selectedContractTypes, setSelectedContractTypes] = useState<
+    Set<ContractTypeValue>
+  >(() => new Set(offer?.contractType ?? []));
 
   const action =
     mode === 'edit' && offer
@@ -79,6 +136,18 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
         next.add(id);
       } else {
         next.delete(id);
+      }
+      return next;
+    });
+  }
+
+  function toggleContractType(value: ContractTypeValue, checked: boolean) {
+    setSelectedContractTypes((prev) => {
+      const next = new Set(prev);
+      if (checked) {
+        next.add(value);
+      } else {
+        next.delete(value);
       }
       return next;
     });
@@ -113,12 +182,25 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
       setFetchError(result.error);
       return;
     }
-    if (result.title) {
-      setTitle(result.title);
+    if (!result.title && !result.content) {
+      setFetchError(
+        'Could not find any details on that page — fill the form in manually.',
+      );
+      return;
     }
-    if (result.content) {
-      setContent(result.content);
+    setReviewDraft({
+      title: result.title ?? title,
+      content: result.content ?? content,
+    });
+  }
+
+  function applyReview() {
+    if (!reviewDraft) {
+      return;
     }
+    setTitle(reviewDraft.title);
+    setContent(reviewDraft.content);
+    setReviewDraft(null);
   }
 
   async function handleDeleteTag(id: string) {
@@ -187,6 +269,97 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
           />
         </label>
 
+        <div className="flex gap-2">
+          <Input
+            type="text"
+            name="companyName"
+            label="Company"
+            value={companyName}
+            onChange={(event) => setCompanyName(event.target.value)}
+            className="w-full"
+            placeholder="Acme Inc"
+          />
+          <Input
+            type="text"
+            name="location"
+            label="Location"
+            value={location}
+            onChange={(event) => setLocation(event.target.value)}
+            className="w-full"
+            placeholder="Warsaw"
+          />
+        </div>
+
+        <div className="flex gap-2">
+          <Input
+            type="text"
+            name="rate"
+            label="Rate"
+            value={rate}
+            onChange={(event) => setRate(event.target.value)}
+            className="w-full"
+            placeholder="20-25k PLN/mo"
+          />
+          <Input
+            type="text"
+            name="availability"
+            label="Availability"
+            value={availability}
+            onChange={(event) => setAvailability(event.target.value)}
+            className="w-full"
+            placeholder="Immediate"
+          />
+        </div>
+
+        <div className="flex gap-2">
+          <label className="d-fieldset-label flex flex-col items-start gap-1">
+            Remote type
+            <select
+              name="remoteType"
+              defaultValue={offer?.remoteType ?? ''}
+              className="d-select w-full"
+            >
+              <option value="">Not specified</option>
+              {Object.entries(REMOTE_TYPE_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="d-fieldset-label flex flex-col items-start gap-1">
+            Seniority
+            <select
+              name="seniority"
+              defaultValue={offer?.seniority ?? ''}
+              className="d-select w-full"
+            >
+              <option value="">Not specified</option>
+              {Object.entries(SENIORITY_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium">Contract type</span>
+          <div className="flex flex-wrap gap-2">
+            {CONTRACT_TYPE_VALUES.map((value) => (
+              <Tag
+                key={value}
+                name={CONTRACT_TYPE_LABELS[value]}
+                value={value}
+                inputName="contractType"
+                checked={selectedContractTypes.has(value)}
+                onCheckedChange={(checked) => toggleContractType(value, checked)}
+              />
+            ))}
+          </div>
+        </div>
+
         {mode === 'edit' && (
           <label className="d-fieldset-label flex flex-col items-start gap-1">
             Status
@@ -254,6 +427,37 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
         <div role="alert" className="d-alert d-alert-error text-sm">
           <span>{tagError}</span>
         </div>
+      )}
+
+      {reviewDraft && (
+        <Modal onClose={() => setReviewDraft(null)}>
+          <h3 className="mb-4 text-lg font-semibold">Review fetched details</h3>
+          <div className="flex flex-col gap-3">
+            <Input
+              type="text"
+              label="Title"
+              value={reviewDraft.title}
+              onChange={(event) =>
+                setReviewDraft({ ...reviewDraft, title: event.target.value })
+              }
+              className="w-full"
+            />
+            <label className="d-fieldset-label flex flex-col items-start gap-1">
+              Notes
+              <textarea
+                value={reviewDraft.content}
+                onChange={(event) =>
+                  setReviewDraft({ ...reviewDraft, content: event.target.value })
+                }
+                className="d-textarea w-full"
+                rows={6}
+              />
+            </label>
+            <Button type="button" className="self-start" onClick={applyReview}>
+              Apply
+            </Button>
+          </div>
+        </Modal>
       )}
     </div>
   );

@@ -80,16 +80,47 @@ enum JobOfferStatus {
   STARTED
   IN_PROGRESS
   HIRED
+  REJECTED
   CANCELED
 }
 
+enum ContractType {
+  EMPLOYMENT_CONTRACT
+  B2B
+  MANDATE_CONTRACT
+  CONTRACT_FOR_SPECIFIC_WORK
+  INTERNSHIP
+}
+
+enum RemoteType {
+  REMOTE
+  HYBRID
+  ONSITE
+}
+
+enum SeniorityLevel {
+  JUNIOR
+  MID
+  SENIOR
+  LEAD
+}
+
 model JobOffer {
-  id            String         @id @default(uuid())
+  id            String          @id @default(uuid())
   title         String
   url           String?
   content       String?
-  status        JobOfferStatus @default(STARTED)
-  participant   User           @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  status        JobOfferStatus  @default(STARTED)
+  companyName   String?
+  location      String?
+  remoteType    RemoteType?
+  seniority     SeniorityLevel?
+  rate          String?
+  availability  String?
+  contractType  ContractType[]  @default([])
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt
+  participant   User            @relation(fields: [participantId], references: [id], onDelete: Cascade)
   participantId String
   tags          Tag[]
 

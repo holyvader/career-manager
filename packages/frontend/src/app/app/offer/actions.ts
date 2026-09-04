@@ -15,6 +15,7 @@ const JOB_OFFER_STATUSES = [
   'STARTED',
   'IN_PROGRESS',
   'HIRED',
+  'REJECTED',
   'CANCELED',
 ] as const;
 type JobOfferStatus = (typeof JOB_OFFER_STATUSES)[number];
@@ -27,8 +28,63 @@ function parseStatus(
     : undefined;
 }
 
+const CONTRACT_TYPES = [
+  'EMPLOYMENT_CONTRACT',
+  'B2B',
+  'MANDATE_CONTRACT',
+  'CONTRACT_FOR_SPECIFIC_WORK',
+  'INTERNSHIP',
+] as const;
+type ContractType = (typeof CONTRACT_TYPES)[number];
+
+const REMOTE_TYPES = ['REMOTE', 'HYBRID', 'ONSITE'] as const;
+type RemoteType = (typeof REMOTE_TYPES)[number];
+
+const SENIORITY_LEVELS = ['JUNIOR', 'MID', 'SENIOR', 'LEAD'] as const;
+type SeniorityLevel = (typeof SENIORITY_LEVELS)[number];
+
+function parseEnum<T extends string>(
+  values: readonly T[],
+  value: FormDataEntryValue | null,
+): T | undefined {
+  return (values as readonly string[]).includes(value as string)
+    ? (value as T)
+    : undefined;
+}
+
+function getContractTypes(formData: FormData): ContractType[] {
+  return formData
+    .getAll('contractType')
+    .map(String)
+    .filter((value): value is ContractType =>
+      (CONTRACT_TYPES as readonly string[]).includes(value),
+    );
+}
+
 function getTagIds(formData: FormData): string[] {
   return formData.getAll('tagIds').map(String);
+}
+
+interface OfferDetailFields {
+  companyName: string | undefined;
+  location: string | undefined;
+  remoteType: RemoteType | undefined;
+  seniority: SeniorityLevel | undefined;
+  rate: string | undefined;
+  availability: string | undefined;
+  contractType: ContractType[];
+}
+
+function getOfferDetailFields(formData: FormData): OfferDetailFields {
+  return {
+    companyName: String(formData.get('companyName') ?? '') || undefined,
+    location: String(formData.get('location') ?? '') || undefined,
+    remoteType: parseEnum(REMOTE_TYPES, formData.get('remoteType')),
+    seniority: parseEnum(SENIORITY_LEVELS, formData.get('seniority')),
+    rate: String(formData.get('rate') ?? '') || undefined,
+    availability: String(formData.get('availability') ?? '') || undefined,
+    contractType: getContractTypes(formData),
+  };
 }
 
 async function reconcileTags(
@@ -61,6 +117,7 @@ export async function createOfferAction(
     title,
     url,
     content,
+    ...getOfferDetailFields(formData),
   });
   if (error || !offer) {
     return { error: edenErrorMessage(error?.value, 'Failed to create offer') };
@@ -91,6 +148,7 @@ export async function updateOfferAction(
     url,
     content,
     status,
+    ...getOfferDetailFields(formData),
   });
   if (error) {
     return { error: edenErrorMessage(error.value, 'Failed to update offer') };

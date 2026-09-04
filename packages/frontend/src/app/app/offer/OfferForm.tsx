@@ -1,11 +1,12 @@
 'use client';
 
 import { type FormEvent, useActionState, useState } from 'react';
-import { Button, type ChipVariant, Input, Tag } from '@ds';
+import { Button, type ChipVariant, Input, Loader, Tag } from '@ds';
 import {
   createOfferAction,
   createTagAction,
   deleteTagAction,
+  fetchOfferContentAction,
   type OfferFormState,
   updateOfferAction,
 } from './actions';
@@ -54,6 +55,12 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
   const [newTagName, setNewTagName] = useState('');
   const [tagError, setTagError] = useState<string | null>(null);
 
+  const [title, setTitle] = useState(offer?.title ?? '');
+  const [url, setUrl] = useState(offer?.url ?? '');
+  const [content, setContent] = useState(offer?.content ?? '');
+  const [isFetchingUrl, setIsFetchingUrl] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
   const action =
     mode === 'edit' && offer
       ? updateOfferAction.bind(
@@ -94,6 +101,26 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
     setNewTagName('');
   }
 
+  async function handleFetchFromUrl() {
+    if (!url.trim()) {
+      return;
+    }
+    setIsFetchingUrl(true);
+    setFetchError(null);
+    const result = await fetchOfferContentAction(url.trim());
+    setIsFetchingUrl(false);
+    if (result.error) {
+      setFetchError(result.error);
+      return;
+    }
+    if (result.title) {
+      setTitle(result.title);
+    }
+    if (result.content) {
+      setContent(result.content);
+    }
+  }
+
   async function handleDeleteTag(id: string) {
     const result = await deleteTagAction(id);
     if (!result.ok) {
@@ -116,25 +143,45 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
           name="title"
           label="Title"
           required
-          defaultValue={offer?.title}
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
           className="w-full"
           placeholder="Frontend Engineer"
         />
 
-        <Input
-          type="url"
-          name="url"
-          label="URL"
-          defaultValue={offer?.url ?? ''}
-          className="w-full"
-          placeholder="https://company.example.com/careers/123"
-        />
+        <div className="flex items-end gap-2">
+          <Input
+            type="url"
+            name="url"
+            label="URL"
+            value={url}
+            onChange={(event) => setUrl(event.target.value)}
+            className="w-full"
+            placeholder="https://company.example.com/careers/123"
+          />
+          <Button
+            type="button"
+            variant="plain"
+            size="sm"
+            onClick={handleFetchFromUrl}
+            disabled={isFetchingUrl || !url.trim()}
+          >
+            {isFetchingUrl ? <Loader size="xs" /> : 'Fetch details'}
+          </Button>
+        </div>
+
+        {fetchError && (
+          <div role="alert" className="d-alert d-alert-error text-sm">
+            <span>{fetchError}</span>
+          </div>
+        )}
 
         <label className="d-fieldset-label flex flex-col items-start gap-1">
           Notes
           <textarea
             name="content"
-            defaultValue={offer?.content ?? ''}
+            value={content}
+            onChange={(event) => setContent(event.target.value)}
             className="d-textarea w-full"
             rows={4}
           />

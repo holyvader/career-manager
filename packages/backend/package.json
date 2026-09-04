@@ -26,6 +26,7 @@
     "@prisma/adapter-pg": "catalog:backend",
     "@prisma/client": "catalog:backend",
     "better-auth": "catalog:backend",
+    "cheerio": "catalog:backend",
     "dotenv": "catalog:backend",
     "elysia": "catalog:backend",
     "emailjs": "catalog:backend",

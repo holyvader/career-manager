@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Link } from '@ds';
+import { Link, Loader } from '@ds';
 import { SessionGate } from '../../SessionGate';
 import { OfferDetail } from './OfferDetail';
 
@@ -11,7 +11,7 @@ export default function Page({ params }: PageProps) {
   return (
     <div>
       <Link href="/app">Back to offers</Link>
-      <Suspense fallback={<span className="d-loading d-loading-spinner" />}>
+      <Suspense fallback={<Loader />}>
         <SessionGate>
           <OfferDetail params={params} />
         </SessionGate>

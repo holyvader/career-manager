@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Link } from '@ds';
+import { Link, Loader } from '@ds';
 
 interface VerifyEmailContentProps {
   searchParams: Promise<{ error?: string }>;
@@ -37,7 +37,7 @@ export default function Page({ searchParams }: PageProps) {
         <div className="d-card-body">
           <h2 className="text-lg font-semibold">Email verification</h2>
 
-          <Suspense fallback={<span className="d-loading d-loading-spinner" />}>
+          <Suspense fallback={<Loader />}>
             <VerifyEmailContent searchParams={searchParams} />
           </Suspense>
 

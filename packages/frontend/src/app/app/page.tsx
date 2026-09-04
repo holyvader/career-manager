@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { Loader } from '@ds';
 import { edenServer } from '@/lib/eden-server';
 import { OfferListClient } from './OfferListClient';
 import { SessionGate } from './SessionGate';
@@ -14,7 +15,7 @@ async function OfferListData() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<span className="d-loading d-loading-spinner" />}>
+    <Suspense fallback={<Loader />}>
       <SessionGate>
         <OfferListData />
       </SessionGate>

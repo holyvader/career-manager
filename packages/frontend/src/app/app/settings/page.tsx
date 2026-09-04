@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { Loader } from '@ds';
 import { edenServer } from '@/lib/eden-server';
 import { SessionGate } from '../SessionGate';
 import { ProfileForm } from './ProfileForm';
@@ -44,7 +45,7 @@ async function SettingsContent() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<span className="d-loading d-loading-spinner" />}>
+    <Suspense fallback={<Loader />}>
       <SessionGate>
         <SettingsContent />
       </SessionGate>

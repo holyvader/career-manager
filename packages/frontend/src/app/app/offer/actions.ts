@@ -118,3 +118,15 @@ export async function deleteTagAction(id: string) {
   const { error } = await edenServer.tag({ id }).delete();
   return { ok: !error };
 }
+
+export async function fetchOfferContentAction(url: string) {
+  const { data, error } = await edenServer.offers.import.post({ url });
+  if (error || !data) {
+    return {
+      title: null,
+      content: null,
+      error: edenErrorMessage(error?.value, 'Failed to fetch offer details'),
+    };
+  }
+  return { title: data.title, content: data.content, error: null };
+}

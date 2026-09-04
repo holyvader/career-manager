@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Link } from '@ds';
+import { Link, Loader } from '@ds';
 import { ResetPasswordForm } from './ResetPasswordForm';
 
 interface ResetPasswordContentProps {
@@ -41,7 +41,7 @@ export default function Page({ searchParams }: PageProps) {
         <div className="d-card-body">
           <h2 className="text-lg font-semibold">Reset your password</h2>
 
-          <Suspense fallback={<span className="d-loading d-loading-spinner" />}>
+          <Suspense fallback={<Loader />}>
             <ResetPasswordContent searchParams={searchParams} />
           </Suspense>
         </div>

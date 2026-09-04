@@ -53,6 +53,7 @@
 			"@prisma/adapter-pg": "^7.9.1",
 			"@prisma/client": "^7.9.1",
 			"better-auth": "^1.7.1",
+			"cheerio": "^1.2.0",
 			"dotenv": "^17.4.2",
 			"elysia": "^1.4.30",
 			"emailjs": "^5.0.3",

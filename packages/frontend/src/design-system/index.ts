@@ -3,6 +3,7 @@ export * from './button/Button';
 export * from './chip/Chip';
 export * from './input/Input';
 export * from './link/Link';
+export * from './loader/Loader';
 export * from './modal/Modal';
 export * from './tabs/Tabs';
 export * from './tag/Tag';

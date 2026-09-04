@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import '@ds/theme/css/globals.css';
 
 export const metadata: Metadata = {
-  title: 'Career Manager',
+  title: 'CVentually',
   description:
     'Your partner in career management, helping you track your job applications and interviews with ease.',
   keywords: [

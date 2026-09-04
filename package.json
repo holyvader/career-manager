@@ -38,7 +38,8 @@
 			"@elysiajs/eden": "^1.4.9",
 			"next": "^16.3.3",
 			"react": "^19.2.8",
-			"react-dom": "^19.2.8"
+			"react-dom": "^19.2.8",
+			"@heroicons/react": "2.2.0"
 		},
 		"frontend-dev": {
 			"@tailwindcss/postcss": "4.3.3",

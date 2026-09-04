@@ -1,5 +1,11 @@
 export function cx(
-  ...args: (string | boolean | Record<string, boolean | string>)[]
+  ...args: (
+    | string
+    | boolean
+    | undefined
+    | null
+    | Record<string, boolean | string>
+  )[]
 ): string {
   return args
     .map((arg) => {

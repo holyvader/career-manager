@@ -1,6 +1,7 @@
 export * from './app-menu/AppMenu';
 export * from './button/Button';
 export * from './chip/Chip';
+export * from './icon';
 export * from './input/Input';
 export * from './link/Link';
 export * from './loader/Loader';

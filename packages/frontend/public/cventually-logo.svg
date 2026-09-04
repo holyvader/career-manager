@@ -1,0 +1,29 @@
+<svg width="800" height="220" viewBox="0 0 800 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>CVentually Logo</title>
+  <desc>Monochrome horizontal logo with a document icon and CVentually wordmark.</desc>
+
+  <g stroke="currentColor" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+    <!-- motion lines -->
+    <path d="M42 82H76"/>
+    <path d="M28 110H76"/>
+    <path d="M42 138H76"/>
+
+    <!-- document outline -->
+    <path d="M104 48H168L210 90V172C210 183.046 201.046 192 190 192H104C92.9543 192 84 183.046 84 172V68C84 56.9543 92.9543 48 104 48Z"/>
+    <path d="M168 48V90H210"/>
+
+    <!-- document text -->
+    <path d="M118 110H174"/>
+    <path d="M118 140H174"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="260" y="152"
+        fill="currentColor"
+        font-family="Inter, Arial, Helvetica, sans-serif"
+        font-size="112"
+        font-weight="800"
+        letter-spacing="-5">
+    CVentually
+  </text>
+</svg>

@@ -73,6 +73,7 @@ interface OfferDetailFields {
   rate: string | undefined;
   availability: string | undefined;
   trackingLink: string | undefined;
+  notes: string | undefined;
   contractType: ContractType[];
 }
 
@@ -85,6 +86,7 @@ function getOfferDetailFields(formData: FormData): OfferDetailFields {
     rate: String(formData.get('rate') ?? '') || undefined,
     availability: String(formData.get('availability') ?? '') || undefined,
     trackingLink: String(formData.get('trackingLink') ?? '') || undefined,
+    notes: String(formData.get('notes') ?? '') || undefined,
     contractType: getContractTypes(formData),
   };
 }

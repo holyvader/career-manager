@@ -40,6 +40,7 @@ export interface OfferData {
   rate: string | null;
   availability: string | null;
   trackingLink: string | null;
+  notes: string | null;
   contractType: ContractTypeValue[];
   tags: TagOption[];
 }
@@ -116,6 +117,7 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
   const [rate, setRate] = useState(offer?.rate ?? '');
   const [availability, setAvailability] = useState(offer?.availability ?? '');
   const [trackingLink, setTrackingLink] = useState(offer?.trackingLink ?? '');
+  const [notes, setNotes] = useState(offer?.notes ?? '');
   const [selectedContractTypes, setSelectedContractTypes] = useState<
     Set<ContractTypeValue>
   >(() => new Set(offer?.contractType ?? []));
@@ -245,7 +247,6 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
           />
           <Button
             type="button"
-            variant="plain"
             size="sm"
             onClick={handleFetchFromUrl}
             disabled={isFetchingUrl || !url.trim()}
@@ -261,7 +262,7 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
         )}
 
         <label className="d-fieldset-label flex flex-col items-start gap-1">
-          Notes
+          Job description
           <textarea
             name="content"
             value={content}
@@ -366,7 +367,9 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
                 value={value}
                 inputName="contractType"
                 checked={selectedContractTypes.has(value)}
-                onCheckedChange={(checked) => toggleContractType(value, checked)}
+                onCheckedChange={(checked) =>
+                  toggleContractType(value, checked)
+                }
               />
             ))}
           </div>
@@ -408,6 +411,18 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
           </div>
         </div>
 
+        <label className="d-fieldset-label flex flex-col items-start gap-1">
+          Notes
+          <textarea
+            name="notes"
+            value={notes}
+            onChange={(event) => setNotes(event.target.value)}
+            className="d-textarea w-full"
+            rows={4}
+            placeholder="Recruiter call scheduled for Thursday..."
+          />
+        </label>
+
         {state.error && (
           <div role="alert" className="d-alert d-alert-error text-sm">
             <span>{state.error}</span>
@@ -431,7 +446,7 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
           size="sm"
           placeholder="Remote"
         />
-        <Button type="submit" variant="plain" size="sm">
+        <Button type="submit" size="sm">
           Add tag
         </Button>
       </form>
@@ -455,11 +470,14 @@ export function OfferForm({ mode, offer, tags }: OfferFormProps) {
               className="w-full"
             />
             <label className="d-fieldset-label flex flex-col items-start gap-1">
-              Notes
+              Job description
               <textarea
                 value={reviewDraft.content}
                 onChange={(event) =>
-                  setReviewDraft({ ...reviewDraft, content: event.target.value })
+                  setReviewDraft({
+                    ...reviewDraft,
+                    content: event.target.value,
+                  })
                 }
                 className="d-textarea w-full"
                 rows={6}

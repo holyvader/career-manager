@@ -118,6 +118,7 @@ model JobOffer {
   rate          String?
   availability  String?
   trackingLink  String?
+  notes         String?
   contractType  ContractType[]  @default([])
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @default(now()) @updatedAt

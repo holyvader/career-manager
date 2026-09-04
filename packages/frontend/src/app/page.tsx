@@ -12,7 +12,7 @@ export default function Home() {
           interviews, and offers - so you always know where things stand and
           what to do next.
         </p>
-        <Link href="/enter" variant="primary" size="lg">
+        <Link href="/enter" color="primary" size="lg">
           Get started
         </Link>
       </main>

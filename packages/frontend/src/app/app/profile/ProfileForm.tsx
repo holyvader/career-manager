@@ -124,13 +124,7 @@ export function ProfileForm({
             </Button>
           </div>
         ))}
-        <Button
-          type="button"
-          variant="plain"
-          size="sm"
-          onClick={addRow}
-          className="self-start"
-        >
+        <Button type="button" size="sm" onClick={addRow} className="self-start">
           + Add link
         </Button>
       </div>

@@ -15,7 +15,8 @@
     "@elysiajs/eden": "catalog:frontend",
     "next": "catalog:frontend",
     "react": "catalog:frontend",
-    "react-dom": "catalog:frontend"
+    "react-dom": "catalog:frontend",
+    "@heroicons/react": "catalog:frontend"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:linting",

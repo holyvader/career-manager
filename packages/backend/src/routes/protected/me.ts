@@ -40,6 +40,7 @@ const offerDetailFieldsSchema = {
   rate: t.Optional(t.String({ maxLength: 100 })),
   availability: t.Optional(t.String({ maxLength: 100 })),
   trackingLink: t.Optional(t.String({ format: 'uri', maxLength: 2048 })),
+  notes: t.Optional(t.String({ maxLength: 10_000 })),
   contractType: t.Optional(t.Array(contractTypeSchema)),
 };
 
@@ -203,6 +204,7 @@ export const meRoutes = new Elysia({ prefix: '/me' })
             rate: body.rate,
             availability: body.availability,
             trackingLink: body.trackingLink,
+            notes: body.notes,
             contractType: body.contractType,
             participantId: session.user.id,
           },
@@ -279,6 +281,7 @@ export const meRoutes = new Elysia({ prefix: '/me' })
             rate: body.rate,
             availability: body.availability,
             trackingLink: body.trackingLink,
+            notes: body.notes,
             contractType: body.contractType,
           },
           include: { tags: true },

@@ -37,9 +37,10 @@ export function Modal({ children, onClose }: ModalProps) {
         {children}
       </div>
       <form method="dialog" className="d-modal-backdrop">
-        <Button type="submit" variant="none">
-          close
-        </Button>
+        {/* Intentionally a raw, unstyled <button> - it must stay invisible
+            to work as a click-outside-to-dismiss target. The design-system
+            Button always applies `d-btn`, which would make this visible. */}
+        <button type="submit">close</button>
       </form>
     </dialog>
   );

@@ -19,7 +19,9 @@ export const chipVariantClasses: Record<ChipVariant, string> = {
 
 export function Chip({ variant = 'neutral', className, children }: ChipProps) {
   return (
-    <span className={cx('d-badge', chipVariantClasses[variant], className ?? '')}>
+    <span
+      className={cx('d-badge', chipVariantClasses[variant], className ?? '')}
+    >
       {children}
     </span>
   );

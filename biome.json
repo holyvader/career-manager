@@ -68,7 +68,7 @@
               "options": {
                 "patterns": [
                   {
-                    "group": ["@mantine/*"]
+                    "group": ["@heroicons/react"]
                   }
                 ]
               }

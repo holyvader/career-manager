@@ -1,4 +1,3 @@
-import { Button } from '@ds/button/Button';
 import { Input } from '@ds/input/Input';
 
 export interface TagProps {
@@ -34,15 +33,17 @@ export function Tag({
         {name}
       </label>
       {onDelete && (
-        <Button
+        // Intentionally a raw <button>, not the design-system Button -
+        // this needs to stay a plain inline "✕" with no button chrome,
+        // and Button always applies `d-btn` now.
+        <button
           type="button"
-          variant="none"
           className="text-neutral"
           onClick={onDelete}
           aria-label={deleteLabel ?? `Delete tag ${name}`}
         >
           ✕
-        </Button>
+        </button>
       )}
     </span>
   );

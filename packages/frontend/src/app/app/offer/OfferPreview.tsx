@@ -50,9 +50,7 @@ export function OfferPreview({ offer }: OfferFormProps) {
           <span>Seniority: {SENIORITY_LABELS[offer.seniority]}</span>
         )}
         {offer.rate && <span>Rate: {offer.rate}</span>}
-        {offer.availability && (
-          <span>Availability: {offer.availability}</span>
-        )}
+        {offer.availability && <span>Availability: {offer.availability}</span>}
         {safeTrackingLink && (
           <span>
             <a
@@ -74,7 +72,18 @@ export function OfferPreview({ offer }: OfferFormProps) {
           </span>
         )}
       </div>
-      <pre>{offer?.content ?? ''}</pre>
+      {offer?.content && (
+        <div className="flex flex-col gap-1 text-sm">
+          <span className="font-medium">Job description</span>
+          <pre>{offer.content}</pre>
+        </div>
+      )}
+      {offer?.notes && (
+        <div className="flex flex-col gap-1 text-sm">
+          <span className="font-medium">Notes</span>
+          <pre>{offer.notes}</pre>
+        </div>
+      )}
       <pre>{offer.tags.map((it) => it.name).join(', ')}</pre>
     </div>
   );

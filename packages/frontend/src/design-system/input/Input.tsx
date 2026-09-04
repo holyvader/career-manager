@@ -26,11 +26,21 @@ const inputSizeClasses: Record<InputKind, string> = {
   checkbox: 'd-checkbox-xs',
 };
 
-export function Input({ type = 'text', label, size, className, ...props }: InputProps) {
+export function Input({
+  type = 'text',
+  label,
+  size,
+  className,
+  ...props
+}: InputProps) {
   const field = (
     <input
       type={type}
-      className={cx(inputBaseClasses[type], size ? inputSizeClasses[type] : '', className ?? '')}
+      className={cx(
+        inputBaseClasses[type],
+        size ? inputSizeClasses[type] : '',
+        className ?? '',
+      )}
       {...props}
     />
   );

@@ -64,6 +64,7 @@
   },
   "trustedDependencies": [
     "sharp",
+    "bun",
   ],
   "catalogs": {
     "backend": {

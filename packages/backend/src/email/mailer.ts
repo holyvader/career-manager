@@ -1,3 +1,4 @@
+import '../env';
 import { SMTPClient } from 'emailjs';
 import { mailLogger } from '../tools/logger';
 

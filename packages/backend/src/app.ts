@@ -1,10 +1,8 @@
-import { config } from 'dotenv';
+import './env';
 import { Elysia } from 'elysia';
 import { prisma } from './db/prismaClient';
 import { edenApp } from './edenApp';
 import { apiLogger, dbLogger } from './tools/logger';
-
-config({ path: new URL('../.env', import.meta.url).pathname });
 
 async function connectToDatabase(maxAttempts = 5, delayMs = 1000) {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {

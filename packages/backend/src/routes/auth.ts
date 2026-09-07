@@ -1,6 +1,6 @@
+import '../env';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { config } from 'dotenv';
 import { prisma } from '../db/prismaClient';
 import { sendMail } from '../email/mailer';
 import {
@@ -8,8 +8,6 @@ import {
   verificationEmailTemplate,
 } from '../email/templates';
 import { mailLogger } from '../tools/logger';
-
-config({ path: new URL('../../.env', import.meta.url).pathname });
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: 'postgresql' }),

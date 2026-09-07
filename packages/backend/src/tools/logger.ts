@@ -1,3 +1,4 @@
+import '../env';
 import pino from 'pino';
 import type { LokiOptions } from 'pino-loki';
 

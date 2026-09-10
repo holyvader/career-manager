@@ -1,6 +1,6 @@
 import { Elysia, t } from 'elysia';
-import { auth } from './auth';
-import { isRateLimited } from './rateLimit';
+import { isRateLimited } from '../../shared/rateLimit';
+import { auth } from './application';
 
 const userSchema = t.Object({
   id: t.String(),
@@ -44,7 +44,7 @@ const rateLimitedBody = () => ({
 // counterpart with `asResponse: true`, which never throws (even on failure it
 // resolves to a fully-formed Response with the right status/body/Set-Cookie)
 // and Elysia passes a returned Response straight through untouched.
-export const authRpc = new Elysia({ prefix: '/auth' })
+export const authController = new Elysia({ prefix: '/auth' })
   .post(
     '/signUp',
     ({ body, request, status }) => {

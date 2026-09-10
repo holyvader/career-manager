@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'bun:test';
 import { prisma } from '../../db/prismaClient';
-import { meRoutes } from './me';
+import { meRoutes } from '../../routes/me';
 import {
   createTestUser,
   deleteTestUser,
@@ -8,7 +8,7 @@ import {
   patchJson,
   postJson,
   type TestUser,
-} from './testUtils';
+} from '../../testing/testUtils';
 
 describe('me routes', () => {
   let userA: TestUser;
@@ -235,7 +235,11 @@ describe('me routes', () => {
       await postJson(
         meRoutes,
         '/me/offers',
-        { title: 'Frontend role', companyName: 'Widgets Inc', contractType: ['B2B'] },
+        {
+          title: 'Frontend role',
+          companyName: 'Widgets Inc',
+          contractType: ['B2B'],
+        },
         user.cookie,
       );
       await postJson(
@@ -347,7 +351,7 @@ describe('me routes', () => {
       const before = await jsonRequest(meRoutes, '/me', {
         cookie: userB.cookie,
       });
-      const beforeBody = (await before.json()) as { name: string };
+      const BeforeBody = (await before.json()) as { name: string };
 
       const res = await patchJson(
         meRoutes,
@@ -356,7 +360,7 @@ describe('me routes', () => {
         userB.cookie,
       );
       const body = (await res.json()) as { name: string };
-      expect(body.name).toBe(beforeBody.name);
+      expect(body.name).toBe(BeforeBody.name);
     });
   });
 });

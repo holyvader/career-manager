@@ -42,3 +42,30 @@ See `package.json` for the full list - `prisma:*` scripts wrap the Prisma CLI, `
 ## OpenAPI docs
 
 Once running, interactive API docs are served at http://localhost:3334/openapi.
+
+## Source organization
+
+`src/domains` groups API code by `auth`, `users`, `job-offers`, and `tags`.
+Each domain keeps its controller, service, repository, and request schemas together:
+
+- Controllers define routes, validate HTTP input, and map service failures to responses.
+- Services implement application rules, ownership checks, and event logging.
+- Repository interfaces define persistence operations; `adapters/prismaRepository.ts`
+  implements them and translates provider-specific failures such as duplicate tags.
+- `application.ts` wires production adapters into service factories. Tests can supply
+  in-memory implementations without importing the database or network clients.
+
+Job-board HTTP/DNS access lives in `domains/job-offers/adapters/jobBoardContentSource.ts`
+behind the `JobOfferContentSource` interface. HTML extraction remains in `importing`.
+SMTP lives in `email/adapters/smtpMailSender.ts` behind `MailSender`; authentication
+receives that adapter through its application wiring and retains Better Auth's
+Prisma persistence adapter. Services receive logging through the `Logger` interface.
+Repository contracts reuse generated model types only as compile-time data shapes;
+Prisma queries and runtime errors stay inside the adapters.
+Shared rate limiting and service failures live in `src/shared`; integration-test
+helpers live in `src/testing`. `src/routes` only composes controllers, and
+`edenApp.ts` assembles the API while preserving Eden's inferred client types.
+Existing endpoint paths remain unchanged, including `/me/offers` and `/offers/import`.
+
+Run `bun test` from this directory. Route tests require the local database with
+migrations applied; start `db` and `mailpit` using the development commands above.

@@ -1,5 +1,5 @@
-import { prisma } from '../../db/prismaClient';
-import { auth } from '../auth';
+import { prisma } from '../db/prismaClient';
+import { auth } from '../domains/auth/application';
 
 export interface TestUser {
   id: string;

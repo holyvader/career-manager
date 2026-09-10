@@ -1,10 +1,10 @@
 // better-auth's own rate-limit middleware only runs for requests dispatched
 // through its mounted HTTP router (auth.handler) - it never fires for direct
-// auth.api.*() calls, which is what authRpc.ts uses so these routes can be
+// auth.api.*() calls, which is what controller.ts uses so these routes can be
 // typed for Eden Treaty. Verified directly: hammering /auth/signIn (our
 // wrapper) never triggers a 429, while hammering the same request against
 // the still-mounted /api/auth/sign-in/email does. So the sensitive routes
-// need their own limiter - this one, applied in authRpc.ts.
+// need their own limiter - this one, applied in controller.ts.
 interface Bucket {
   count: number;
   resetAt: number;

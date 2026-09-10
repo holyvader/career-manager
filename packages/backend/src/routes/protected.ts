@@ -1,9 +1,8 @@
 import { Elysia } from 'elysia';
-import { meRoutes } from './protected/me';
-import { offerImportRoutes } from './protected/offerImport';
-import { tagRoutes } from './protected/tag';
-
+import { offerImportRoutes } from '../domains/job-offers/importController';
+import { tagsController } from '../domains/tags/controller';
+import { meRoutes } from './me';
 export const protectedRoutes = new Elysia()
   .use(meRoutes)
-  .use(tagRoutes)
+  .use(tagsController)
   .use(offerImportRoutes);

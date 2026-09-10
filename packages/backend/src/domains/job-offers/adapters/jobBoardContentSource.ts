@@ -1,5 +1,10 @@
 import { resolve4, resolve6 } from 'node:dns/promises';
-import { decodeHtml, extractJobPosting, type ExtractedJobPosting } from './extractJobPosting';
+import type { JobOfferContentSource } from '../contentSource';
+import {
+  decodeHtml,
+  type ExtractedJobPosting,
+  extractJobPosting,
+} from '../importing/extractJobPosting';
 
 const ALLOWED_HOSTS = new Set([
   'linkedin.com',
@@ -78,7 +83,9 @@ function isPrivateV6(addr: string): boolean {
 // allowlist of large SaaS providers this mainly guards against environment
 // misconfiguration (e.g. a stray /etc/hosts entry), not a determined
 // attacker controlling one of these domains' DNS.
-export async function hasOnlyPublicAddresses(hostname: string): Promise<boolean> {
+export async function hasOnlyPublicAddresses(
+  hostname: string,
+): Promise<boolean> {
   const [v4, v6] = await Promise.all([
     resolve4(hostname).catch(() => [] as string[]),
     resolve6(hostname).catch(() => [] as string[]),
@@ -96,7 +103,10 @@ export async function hasOnlyPublicAddresses(hostname: string): Promise<boolean>
 // small reported length can still decompress into a huge buffer. Reading
 // via the stream reader and cancelling it mid-flight actually stops the
 // download rather than merely stopping accumulation after the fact.
-async function readBodyWithLimit(response: Response, maxBytes: number): Promise<Uint8Array> {
+async function readBodyWithLimit(
+  response: Response,
+  maxBytes: number,
+): Promise<Uint8Array> {
   const reader = response.body?.getReader();
   if (!reader) {
     return new Uint8Array(0);
@@ -132,7 +142,10 @@ async function fetchHtmlWithLimits(startUrl: URL): Promise<string | null> {
 
   for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
     const sizeController = new AbortController();
-    const signal = AbortSignal.any([AbortSignal.timeout(FETCH_TIMEOUT_MS), sizeController.signal]);
+    const signal = AbortSignal.any([
+      AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      sizeController.signal,
+    ]);
 
     const response = await fetch(currentUrl, {
       redirect: 'manual',
@@ -155,7 +168,10 @@ async function fetchHtmlWithLimits(startUrl: URL): Promise<string | null> {
         return null;
       }
       const nextUrl = new URL(location, currentUrl);
-      if (nextUrl.protocol !== 'https:' || !ALLOWED_HOSTS.has(nextUrl.hostname.toLowerCase())) {
+      if (
+        nextUrl.protocol !== 'https:' ||
+        !ALLOWED_HOSTS.has(nextUrl.hostname.toLowerCase())
+      ) {
         return null;
       }
       if (!(await hasOnlyPublicAddresses(nextUrl.hostname))) {
@@ -173,7 +189,9 @@ async function fetchHtmlWithLimits(startUrl: URL): Promise<string | null> {
       return null;
     }
 
-    const bytes = await readBodyWithLimit(response, MAX_RESPONSE_BYTES).catch(() => null);
+    const bytes = await readBodyWithLimit(response, MAX_RESPONSE_BYTES).catch(
+      () => null,
+    );
     if (!bytes) {
       return null;
     }
@@ -183,7 +201,9 @@ async function fetchHtmlWithLimits(startUrl: URL): Promise<string | null> {
   return null; // exceeded MAX_REDIRECTS
 }
 
-export async function fetchJobOfferContent(input: string): Promise<ExtractedJobPosting | null> {
+export async function fetchJobOfferContent(
+  input: string,
+): Promise<ExtractedJobPosting | null> {
   const url = validateJobOfferUrl(input);
   if (!url) {
     return null;
@@ -197,3 +217,7 @@ export async function fetchJobOfferContent(input: string): Promise<ExtractedJobP
   }
   return extractJobPosting(html);
 }
+
+export const jobBoardContentSource: JobOfferContentSource = {
+  fetchContent: fetchJobOfferContent,
+};

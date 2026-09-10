@@ -1,7 +1,7 @@
 import { Elysia } from 'elysia';
-import { auth } from '../auth';
+import { auth } from './application';
 
-// Shared by every protected route group (see me.ts, tag.ts) - each `.use()`s
+// Shared by every protected route group (see domain controllers) - each `.use()`s
 // this so it's self-evident from the file alone that its routes require a
 // session, rather than relying on a guard registered somewhere else up the
 // chain. `as: 'scoped'` propagates the resolve to whichever instance uses

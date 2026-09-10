@@ -14,11 +14,19 @@ export interface ExtractedJobPosting {
 // naively trusting UTF-8 would corrupt ą/ć/ę/ł/ń/ó/ś/ź/ż. Sniff the real
 // charset from the Content-Type header, falling back to a <meta charset>
 // scan of the first ~1KB (matches how browsers sniff when the header omits it).
-export function decodeHtml(bytes: Uint8Array, contentType: string | null): string {
-  let charset = contentType?.match(/charset=([^;]+)/i)?.[1]?.trim().toLowerCase();
+export function decodeHtml(
+  bytes: Uint8Array,
+  contentType: string | null,
+): string {
+  let charset = contentType
+    ?.match(/charset=([^;]+)/i)?.[1]
+    ?.trim()
+    .toLowerCase();
   if (!charset) {
     const head = new TextDecoder('latin1').decode(bytes.subarray(0, 1024));
-    charset = head.match(/<meta[^>]+charset=["']?([\w-]+)/i)?.[1]?.toLowerCase();
+    charset = head
+      .match(/<meta[^>]+charset=["']?([\w-]+)/i)?.[1]
+      ?.toLowerCase();
   }
   try {
     return new TextDecoder(charset ?? 'utf-8').decode(bytes);
@@ -33,7 +41,11 @@ export function decodeHtml(bytes: Uint8Array, contentType: string | null): strin
 // honest contract for this API regardless).
 export function htmlToPlainText(html: string): string {
   const $fragment = load(html);
-  return $fragment.root().text().replace(/\n{3,}/g, '\n\n').trim();
+  return $fragment
+    .root()
+    .text()
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 interface JobPostingFields {
@@ -60,10 +72,13 @@ function findJobPosting(node: unknown, depth = 0): JobPostingFields | null {
 
   const obj = node as Record<string, unknown>;
   const types = Array.isArray(obj['@type']) ? obj['@type'] : [obj['@type']];
-  if (types.some((t) => typeof t === 'string' && t.toLowerCase() === 'jobposting')) {
+  if (
+    types.some((t) => typeof t === 'string' && t.toLowerCase() === 'jobposting')
+  ) {
     return {
       title: typeof obj.title === 'string' ? obj.title : undefined,
-      description: typeof obj.description === 'string' ? obj.description : undefined,
+      description:
+        typeof obj.description === 'string' ? obj.description : undefined,
     };
   }
   if (Array.isArray(obj['@graph'])) {
@@ -75,7 +90,9 @@ function findJobPosting(node: unknown, depth = 0): JobPostingFields | null {
   return null;
 }
 
-function extractFromJsonLd($: ReturnType<typeof load>): JobPostingFields | null {
+function extractFromJsonLd(
+  $: ReturnType<typeof load>,
+): JobPostingFields | null {
   for (const el of $('script[type="application/ld+json"]').toArray()) {
     const raw = $(el).contents().text();
     if (!raw?.trim()) {
@@ -95,7 +112,9 @@ function extractFromJsonLd($: ReturnType<typeof load>): JobPostingFields | null 
   return null;
 }
 
-function extractFromOpenGraph($: ReturnType<typeof load>): JobPostingFields | null {
+function extractFromOpenGraph(
+  $: ReturnType<typeof load>,
+): JobPostingFields | null {
   const title = $('meta[property="og:title"]').attr('content');
   const description = $('meta[property="og:description"]').attr('content');
   if (!title && !description) {
@@ -104,7 +123,10 @@ function extractFromOpenGraph($: ReturnType<typeof load>): JobPostingFields | nu
   return { title, description };
 }
 
-function normalize(value: string | undefined | null, maxLength: number): string | null {
+function normalize(
+  value: string | undefined | null,
+  maxLength: number,
+): string | null {
   if (!value) {
     return null;
   }
@@ -123,7 +145,10 @@ function looksLikePlaceholder(value: string): boolean {
   return /^[\w-]+(\.[\w-]+)+$/.test(value);
 }
 
-function normalizeContent(value: string | undefined | null, maxLength: number): string | null {
+function normalizeContent(
+  value: string | undefined | null,
+  maxLength: number,
+): string | null {
   const normalized = normalize(value, maxLength);
   if (normalized && looksLikePlaceholder(normalized)) {
     return null;

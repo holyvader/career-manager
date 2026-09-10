@@ -1,8 +1,8 @@
 import { cors } from '@elysiajs/cors';
 import { openapi } from '@elysiajs/openapi';
 import { Elysia } from 'elysia';
-import { auth } from './routes/auth';
-import { authRpc } from './routes/authRpc';
+import { auth } from './domains/auth/application';
+import { authController } from './domains/auth/controller';
 import { protectedRoutes } from './routes/protected';
 import { apiLogger } from './tools/logger';
 
@@ -38,7 +38,7 @@ export const edenApp = new Elysia()
     return { message: 'Internal server error' };
   })
   .mount(auth.handler)
-  .use(authRpc)
+  .use(authController)
   .use(protectedRoutes);
 
 export type App = typeof edenApp;

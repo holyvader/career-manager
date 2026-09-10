@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
+import { validateJobOfferUrl } from '../adapters/jobBoardContentSource';
 import { extractJobPosting } from './extractJobPosting';
-import { validateJobOfferUrl } from './fetchJobOfferContent';
 
 describe('validateJobOfferUrl', () => {
   it('accepts a valid https URL on an allowlisted host', () => {
@@ -15,7 +15,9 @@ describe('validateJobOfferUrl', () => {
 
   it('rejects a subdomain-confusion attempt', () => {
     expect(validateJobOfferUrl('https://evil-linkedin.com/jobs/1')).toBeNull();
-    expect(validateJobOfferUrl('https://linkedin.com.evil.com/jobs/1')).toBeNull();
+    expect(
+      validateJobOfferUrl('https://linkedin.com.evil.com/jobs/1'),
+    ).toBeNull();
   });
 
   it('rejects an IP-literal host', () => {

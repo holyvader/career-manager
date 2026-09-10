@@ -1,12 +1,12 @@
 import { afterAll, beforeAll, describe, expect, it } from 'bun:test';
-import { tagRoutes } from './tag';
 import {
   createTestUser,
   deleteTestUser,
   jsonRequest,
   postJson,
   type TestUser,
-} from './testUtils';
+} from '../../testing/testUtils';
+import { tagsController as tagRoutes } from './controller';
 
 describe('tag routes', () => {
   let userA: TestUser;

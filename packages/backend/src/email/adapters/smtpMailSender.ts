@@ -1,6 +1,7 @@
-import '../env';
+import type { MailMessage, MailSender } from '../mailSender';
+import '../../env';
 import { SMTPClient } from 'emailjs';
-import { mailLogger } from '../tools/logger';
+import { mailLogger } from '../../tools/logger';
 
 const client = new SMTPClient({
   host: process.env.SMTP_HOST || 'localhost',
@@ -14,13 +15,6 @@ const client = new SMTPClient({
 const from =
   process.env.SMTP_FROM || 'Career Manager <no-reply@career-manager.local>';
 
-interface SendMailInput {
-  to: string;
-  subject: string;
-  text: string;
-  html: string;
-}
-
 // Uses emailjs's promise-based `sendAsync` (backed by non-blocking socket I/O)
 // so a slow SMTP round-trip never ties up the event loop.
 export async function sendMail({
@@ -28,7 +22,7 @@ export async function sendMail({
   subject,
   text,
   html,
-}: SendMailInput): Promise<void> {
+}: MailMessage): Promise<void> {
   try {
     await client.sendAsync({
       from,
@@ -43,3 +37,5 @@ export async function sendMail({
     throw error;
   }
 }
+
+export const smtpMailSender: MailSender = { send: sendMail };

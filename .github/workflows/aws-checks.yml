@@ -1,0 +1,46 @@
+name: AWS configuration checks
+
+on:
+  pull_request:
+    paths:
+      - 'infra/aws/**'
+      - 'deploy/aws/**'
+      - 'packages/backend/src/db/**'
+      - 'packages/backend/Dockerfile'
+      - '.github/workflows/aws-*.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'infra/aws/**'
+      - 'deploy/aws/**'
+      - 'packages/backend/src/db/**'
+      - 'packages/backend/Dockerfile'
+      - '.github/workflows/aws-*.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  configuration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
+      - run: terraform fmt -check -recursive infra/aws
+      - run: terraform -chdir=infra/aws init -backend=false -input=false
+      - run: terraform -chdir=infra/aws validate
+      - run: terraform -chdir=infra/aws test
+      - run: terraform -chdir=infra/aws/bootstrap init -input=false
+      - run: terraform -chdir=infra/aws/bootstrap validate
+      - name: Check deployment scripts
+        run: |
+          bash -n deploy/aws/deploy.sh
+          bash -n deploy/aws/refresh-secrets.sh
+          bash -n infra/aws/templates/cloud-init.sh.tftpl
+          python3 -m unittest discover -s deploy/aws -p 'test_*.py'
+      - name: Verify runtime and migration TLS
+        run: |
+          docker build -f packages/backend/Dockerfile -t career-manager-tls-test .
+          bash deploy/aws/test-tls.sh career-manager-tls-test

@@ -1,0 +1,23 @@
+{$APP_DOMAIN} {
+	log {
+		output stdout
+		format json
+	}
+
+	handle_path /backend/* {
+		reverse_proxy backend:3334
+	}
+
+	handle /api/auth/* {
+		reverse_proxy backend:3334
+	}
+
+	handle {
+		reverse_proxy frontend:3333
+	}
+}
+
+# Internal liveness endpoint, never published on the host.
+http://:8080 {
+	respond /health 200
+}

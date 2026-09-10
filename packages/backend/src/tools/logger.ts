@@ -9,9 +9,13 @@ const lokiHost = process.env.LOKI_HOST;
 function buildLogger(name: string, type: string) {
   const targets: pino.TransportTargetOptions[] = [
     {
-      target: 'pino-pretty',
+      target:
+        process.env.NODE_ENV === 'production' ? 'pino/file' : 'pino-pretty',
       level,
-      options: { colorize: true, translateTime: 'SYS:standard' },
+      options:
+        process.env.NODE_ENV === 'production'
+          ? { destination: 1 }
+          : { colorize: true, translateTime: 'SYS:standard' },
     },
   ];
 

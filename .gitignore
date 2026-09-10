@@ -22,3 +22,15 @@ node_modules/
 
 # turbo
 .turbo
+
+# AWS infrastructure state, local settings, and runtime artifacts
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+!*.tfvars.example
+infra/aws/backend.hcl
+deploy/aws/release.json
+**/__pycache__/
+.env.aws*

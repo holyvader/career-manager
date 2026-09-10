@@ -1,0 +1,50 @@
+#!/bin/bash
+set -euo pipefail
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y ca-certificates curl gnupg unzip python3
+install -m 0755 -d /etc/apt/keyrings
+curl --fail --retry 5 https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
+printf '%s\n' 'deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable' > /etc/apt/sources.list.d/docker.list
+apt-get update
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+systemctl enable --now docker
+curl --fail --retry 5 https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o /tmp/awscliv2.zip
+unzip -q /tmp/awscliv2.zip -d /tmp/awscli-install
+/tmp/awscli-install/aws/install
+rm -rf /tmp/awscli-install /tmp/awscliv2.zip
+if ! snap list amazon-ssm-agent >/dev/null 2>&1; then
+  snap install amazon-ssm-agent --classic
+fi
+snap start --enable amazon-ssm-agent
+install -d -m 0700 /etc/career-manager /opt/career-manager /opt/career-manager/releases /opt/career-manager/runtime
+printf '%s' '${config_b64}' | base64 --decode > /etc/career-manager/config.json
+curl --fail --retry 5 https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem -o /etc/career-manager/rds-global-bundle.pem
+chmod 0644 /etc/career-manager/rds-global-bundle.pem
+cat > /etc/systemd/system/career-manager-secrets.service <<'UNIT'
+[Unit]
+Description=Refresh application secrets and rotated RDS credentials
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecCondition=/usr/bin/test -L /opt/career-manager/current
+ExecStart=/bin/bash /opt/career-manager/current/refresh-secrets.sh
+UNIT
+cat > /etc/systemd/system/career-manager-secrets.timer <<'UNIT'
+[Unit]
+Description=Check for rotated production credentials every five minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=5min
+
+[Install]
+WantedBy=timers.target
+UNIT
+systemctl daemon-reload
+systemctl enable --now career-manager-secrets.timer
+# Written last: deployment fails early if cloud-init has not completed.
+touch /etc/career-manager/ready

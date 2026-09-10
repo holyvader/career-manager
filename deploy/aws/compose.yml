@@ -1,0 +1,71 @@
+name: career-manager-aws
+
+x-logging: &logging
+  driver: awslogs
+  options:
+    awslogs-region: ${AWS_REGION:?}
+    awslogs-group: ${LOG_GROUP:?}
+    mode: non-blocking
+    max-buffer-size: 4m
+
+services:
+  backend:
+    image: ${BACKEND_IMAGE:?}:${IMAGE_TAG:?}
+    restart: unless-stopped
+    # Migrations are a separate release step in deploy.sh.
+    entrypoint: ['bun', 'run', 'src/app.ts']
+    env_file:
+      - path: ${BACKEND_ENV_FILE:?}
+        format: raw
+    volumes:
+      - /etc/career-manager/rds-global-bundle.pem:/etc/ssl/certs/aws-rds-global-bundle.pem:ro
+    healthcheck:
+      test: ['CMD', 'bun', '-e', "const r = await fetch('http://localhost:3334/health'); process.exit(r.ok ? 0 : 1)"]
+      interval: 5s
+      timeout: 5s
+      start_period: 30s
+      retries: 20
+    logging: *logging
+
+  frontend:
+    image: ${FRONTEND_IMAGE:?}:${IMAGE_TAG:?}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      BACKEND_INTERNAL_URL: http://backend:3334
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:3333').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      start_period: 30s
+      retries: 20
+    logging: *logging
+
+  caddy:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:?}
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      frontend:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '--spider', 'http://127.0.0.1:8080/health']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    logging: *logging
+
+volumes:
+  caddy-data:
+  caddy-config:

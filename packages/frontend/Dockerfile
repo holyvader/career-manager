@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssl \
 # Bun keeps a root content-addressable store (node_modules/.bun/...) but
 # places each workspace member's own `.bin` symlinks (e.g. `next`, `prisma`)
 # under that member's own node_modules/.bin, not the root - all three
-# directories are needed for `npm run` to find local binaries.
+# directories are needed for workspace binaries and their dependencies.
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/packages/backend/node_modules packages/backend/node_modules
 COPY --from=deps /app/packages/frontend/node_modules packages/frontend/node_modules
@@ -41,7 +41,8 @@ COPY packages/frontend packages/frontend
 # connects to a real database (see the matching comment in the backend
 # Dockerfile).
 ARG DATABASE_URL=postgresql://placeholder:placeholder@localhost:5432/placeholder
-RUN cd packages/backend && DATABASE_URL=$DATABASE_URL npm run prisma:generate
+# Invoke Node directly: npm's devEngines check rejects this Bun-managed repo.
+RUN cd packages/backend && DATABASE_URL=$DATABASE_URL node node_modules/prisma/build/index.js generate
 
 # Baked into the build, not read at runtime - Next.js inlines
 # NEXT_PUBLIC_* vars into the client bundle at build time, so this must be
@@ -49,7 +50,7 @@ RUN cd packages/backend && DATABASE_URL=$DATABASE_URL npm run prisma:generate
 ARG NEXT_PUBLIC_BACKEND_URL=http://localhost:3334
 ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
 
-RUN cd packages/frontend && npm run build
+RUN cd packages/frontend && node node_modules/next/dist/bin/next build
 
 FROM node:22-slim AS runtime
 WORKDIR /app

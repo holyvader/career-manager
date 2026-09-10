@@ -25,6 +25,9 @@
     "app:prod:up": "docker compose -f docker-compose.prod.yml --env-file .env.production up -d",
     "app:prod:down": "docker compose -f docker-compose.prod.yml --env-file .env.production down",
     "app:prod:logs": "docker compose -f docker-compose.prod.yml --env-file .env.production logs -f",
+    "app:prod:local": "docker compose --project-name career-manager-local-prod -f docker-compose.local-prod.yml up -d --build --wait",
+    "app:prod:local:down": "docker compose --project-name career-manager-local-prod -f docker-compose.local-prod.yml down",
+    "app:prod:local:logs": "docker compose --project-name career-manager-local-prod -f docker-compose.local-prod.yml logs -f",
     "frontend:dev": "cd packages/frontend && bun dev",
     "backend:dev": "cd packages/backend && bun dev"
   },

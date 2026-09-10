@@ -1,0 +1,8 @@
+region             = "eu-central-1"
+app_domain         = "app.your-domain.com"
+email_domain       = "your-domain.com"
+smtp_from          = "no-reply@your-domain.com"
+notification_email = "you@your-domain.com"
+github_repository  = "YOUR-ORG/career-manager"
+# Set when the account already has a GitHub OIDC provider:
+# github_oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com"

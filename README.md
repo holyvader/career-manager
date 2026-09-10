@@ -33,6 +33,52 @@ Open http://localhost:3333.
 
 All credentials in `docker-compose.yml` are throwaway local-dev defaults - do not reuse them for any real deployment.
 
+## Production builds on localhost
+
+With Docker running (Compose v2 with `--wait` support) and port 8888
+available, build and start everything from the repository root:
+
+```bash
+bun run app:prod:local
+```
+
+The separate `docker-compose.local-prod.yml` reuses the production Dockerfiles
+and Next.js standalone configuration. Open https://localhost:8888. Nginx is
+the only service with a published port, bound to loopback; the frontend,
+backend, database, and Mailpit stay on the internal Docker network. Both apps
+use `NODE_ENV=production`, without watch mode.
+
+Nginx automatically generates a self-signed certificate for localhost on
+first start and stores it in its own volume. Your browser will show a
+certificate warning until you trust this certificate locally. No environment
+file or domain setup is needed. Use `localhost` in the browser to match the
+configured auth and CORS URLs. Mailpit still catches outgoing emails, but its
+web UI is not published.
+
+This stack has its own persistent Postgres volume; backend migrations run
+automatically. Server-side frontend requests use `http://backend:3334` inside
+Docker, while browser requests use `https://localhost:8888/backend`. Nginx
+strips `/backend/` before forwarding and routes `/api/auth/` directly to the
+backend for authentication callbacks. The command waits
+for app health checks and leaves the containers running in the background.
+Rerun it to rebuild after code changes.
+
+```bash
+bun run app:prod:local:logs
+bun run app:prod:local:down
+```
+
+Stopping the stack preserves its database. All bundled credentials are local
+defaults; published ports bind only to the loopback interface.
+
+## AWS production deployment
+
+For a single EC2 instance with managed RDS PostgreSQL and SES email, use the
+separate [AWS deployment guide](deploy/aws/README.md). It includes Terraform,
+GitHub Actions/ECR releases, Systems Manager deployment, public HTTPS through
+Caddy, secret rotation, and recovery instructions. Localhost configuration
+remains independent.
+
 ## Production deployment
 
 Self-hosted via Docker - `docker-compose.prod.yml` builds and runs `db` (Postgres), `backend`, `frontend`, and `caddy` (reverse proxy + automatic TLS) as one stack from source. `caddy` is the *only* service exposed to the host (ports `80`/`443`) - `frontend`/`backend` are only reachable from other containers on the compose network, not directly from outside.

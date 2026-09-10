@@ -10,6 +10,16 @@ encrypted gp3 storage. There is no NAT gateway, load balancer, or automatic
 application failover. Deployments briefly stop application traffic. This stack
 incurs AWS charges, including EC2, public IPv4, RDS, storage, and logs.
 
+## AWS service dependencies
+
+![AWS service usage and dependencies: application runtime, build and release, logs and alerts, and Terraform state](images/aws-service-dependencies.png)
+
+The diagram shows the resources defined in `infra/aws` and how the deployment
+workflow and application use them. Arrows describe traffic, artifact transfers,
+or service calls. Repeated services across sections refer to the same resources.
+DNS is managed externally; the S3 bucket for Terraform state is separate from
+the S3 bucket for release bundles.
+
 ## 1. Create infrastructure
 
 Prerequisites: AWS CLI v2 authenticated with your provisioning identity,
